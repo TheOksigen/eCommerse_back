@@ -53,8 +53,10 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 const setupSwagger = (app) => {
+  console.log('Swagger Spec:', swaggerSpec); // Check if swaggerSpec is generated properly
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
+
 
 module.exports = {
   setupSwagger,
