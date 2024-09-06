@@ -101,7 +101,7 @@ const createProduct = async (req, res) => {
 
 /**
  * @swagger
- * /products:
+ * /products/all:
  *   get:
  *     summary: Get all products
  *     tags: [Products]
@@ -221,8 +221,8 @@ const getProducts = async (req, res) => {
 
         if (categoryId) where.categoryId = parseInt(categoryId);
         if (subcategoryId) where.subcategoryId = parseInt(subcategoryId);
-        if (brandId) where.brandId = parseInt(brandId);
-        if (colorId) where.colorId = parseInt(colorId);
+        if (brandId) where.brandsId = parseInt(brandId);
+        if (colorId) where.colorsId = parseInt(colorId);
         if (sizeId) where.sizeId = parseInt(sizeId);
         if (minPrice && maxPrice) where.price = { gte: parseFloat(minPrice), lte: parseFloat(maxPrice) };
         else if (minPrice) where.price = { gte: parseFloat(minPrice) };
@@ -238,9 +238,10 @@ const getProducts = async (req, res) => {
             include: {
                 category: true,
                 subcategory: true,
-                brand: true,
-                color: true,
-                size: true,
+                Brands: true,
+                Colors: true,
+                Size: true,
+                User: true
             }
         });
 
@@ -293,9 +294,10 @@ const getProductById = async (req, res) => {
             include: {
                 category: true,
                 subcategory: true,
-                brand: true,
-                color: true,
-                size: true,
+                Brands: true,
+                Colors: true,
+                Size: true,
+                User: true
             }
         });
         if (product) res.status(200).json(product);
@@ -429,7 +431,11 @@ const searchProduct = async (req, res) => {
             },
             include: {
                 category: true,
-                subcategory: true
+                subcategory: true,
+                Brands: true,
+                Colors: true,
+                Size: true,
+                User: true
             }
         });
 
@@ -439,6 +445,7 @@ const searchProduct = async (req, res) => {
         res.status(500).json({ error: 'Failed to search products' });
     }
 };
+
 
 /**
  * @swagger
@@ -566,7 +573,7 @@ const editProduct = async (req, res) => {
  *       500:
  *         description: Failed to fetch products by category
  */
- const getProductsByCategory = async (req, res) => {
+const getProductsByCategory = async (req, res) => {
     try {
         const categoryId = Number(req.params.categoryId);
 
@@ -580,10 +587,11 @@ const editProduct = async (req, res) => {
             },
             include: {
                 category: true,
-                Subcategory: true,
-                Brands: true,
-                Colors: true,
-                Size: true,
+                subcategory: true,
+                Brands: true,   
+                Colors: true,   
+                Size: true,     
+                User: true     
             }
         });
 
@@ -615,7 +623,7 @@ const editProduct = async (req, res) => {
  *       500:
  *         description: Failed to retrieve products
  */
- const getProductsBySubcategory = async (req, res) => {
+const getProductsBySubcategory = async (req, res) => {
     try {
         const { subcategoryId } = req.params;
         const products = await prisma.product.findMany({
@@ -623,11 +631,12 @@ const editProduct = async (req, res) => {
                 subcategoryId: Number(subcategoryId),
             },
             include: {
-                Brands: true,
-                Colors: true,
-                Size: true,
                 category: true,
-                Subcategory: true,
+                subcategory: true,
+                Brands: true,   
+                Colors: true,   
+                Size: true,     
+                User: true     
             },
         });
 

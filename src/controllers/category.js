@@ -568,7 +568,6 @@ const deleteSubcategoryById = async (req, res) => {
         }
     }
 };
-
 /**
  * @swagger
  * /subcategories/update/{id}:

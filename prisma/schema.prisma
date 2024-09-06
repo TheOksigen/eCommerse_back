@@ -41,23 +41,23 @@ model User {
 }
 
 model Product {
-  id            Int         @id @default(autoincrement())
+  id            Int          @id @default(autoincrement())
   name          String
   description   String
   discount      Int
   price         Float
   images        String[]
-  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category      Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId    Int
-  User          User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        Int?
-  Subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
-  subcategoryId Int
-  Brands        Brands      @relation(fields: [brandsId], references: [id], onDelete: Cascade)
-  brandsId      Int 
-  Colors        Colors?     @relation(fields: [colorsId], references: [id], onDelete: Cascade)
+  User          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int
+  subcategoryId Int?
+  subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
+  brandsId      Int
+  Brands        Brands       @relation(fields: [brandsId], references: [id], onDelete: Cascade)
+  Colors        Colors?      @relation(fields: [colorsId], references: [id], onDelete: Cascade)
   colorsId      Int?
-  Size          Size?       @relation(fields: [sizeId], references: [id], onDelete: Cascade)
+  Size          Size?        @relation(fields: [sizeId], references: [id], onDelete: Cascade)
   sizeId        Int?
   createdTime   DateTime
   updatedTime   DateTime

@@ -68,7 +68,7 @@ const createBrand = async (req, res) => {
             return;
         }
 
-        const newBrand = await prisma.brands.create({
+        const newBrand = await prisma.brand.create({
             data: {
                 name,
             },
@@ -101,7 +101,7 @@ const createBrand = async (req, res) => {
  */
 const getBrands = async (req, res) => {
     try {
-        const brands = await prisma.brands.findMany();
+        const brands = await prisma.brand.findMany();
         res.status(200).json(brands);
     } catch (error) {
         console.error("Get brands error:", error);
@@ -137,7 +137,7 @@ const getBrands = async (req, res) => {
 const getBrandById = async (req, res) => {
     try {
         const { id } = req.params;
-        const brand = await prisma.brands.findUnique({
+        const brand = await prisma.brand.findUnique({
             where: { id: Number(id) },
         });
 
@@ -194,7 +194,15 @@ const updateBrandById = async (req, res) => {
         const { id } = req.params;
         const { name } = req.body;
 
-        const updatedBrand = await prisma.brands.update({
+        const brand = await prisma.brand.findUnique({
+            where: { id: Number(id) },
+        });
+
+        if (!brand) {
+            return res.status(404).json({ error: 'Brand not found' });
+        }
+
+        const updatedBrand = await prisma.brand.update({
             where: { id: Number(id) },
             data: { name },
         });
@@ -231,7 +239,15 @@ const deleteBrandById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        await prisma.brands.delete({
+        const brand = await prisma.brands.findUnique({
+            where: { id: Number(id) },
+        });
+
+        if (!brand) {
+            return res.status(404).json({ error: 'Brand not found' });
+        }
+
+        await prisma.brand.delete({
             where: { id: Number(id) },
         });
 
