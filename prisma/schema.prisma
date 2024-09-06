@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -51,10 +51,10 @@ model Product {
   categoryId    Int
   User          User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int?
-  Subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  Subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
   subcategoryId Int
   Brands        Brands      @relation(fields: [brandsId], references: [id], onDelete: Cascade)
-  brandsId      Int
+  brandsId      Int 
   Colors        Colors?     @relation(fields: [colorsId], references: [id], onDelete: Cascade)
   colorsId      Int?
   Size          Size?       @relation(fields: [sizeId], references: [id], onDelete: Cascade)
