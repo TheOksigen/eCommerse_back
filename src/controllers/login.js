@@ -67,7 +67,7 @@ const login = async (req, res) => {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
 
-        const token = jwt.sign({ userid: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userid: user.id }, process.env.JWT_SECRET, { expiresIn: '999999999h' });
 
         res.status(200).json({ token });
     } catch (error) {
@@ -285,12 +285,15 @@ const register = async (req, res) => {
             },
         });
 
-        res.status(201).json({ message: 'User registered successfully', user: newUser });
+        const token = jwt.sign({ userid: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.status(201).json({ token, message: 'User registered successfully', user: newUser });
     } catch (error) {
         console.error("Register error:", error);
         res.status(500).json({ error: 'Failed to register user' });
     }
 };
+
 
 module.exports = {
     login,
