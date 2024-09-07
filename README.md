@@ -14,7 +14,7 @@ All routes with `auth` middleware require a valid JWT token. You must include th
 }
 ```
 
-## Brand Routes
+## Brand Routes 
 
 | HTTP Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |
