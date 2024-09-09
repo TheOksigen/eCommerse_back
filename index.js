@@ -1,7 +1,12 @@
 const express = require("express")
+// routers
 const productsRouter = require('./src/routes/products.route');
 const loginRouter = require('./src/routes/login.route');
 const categoriesRouter = require('./src/routes/category.route');
+const brandRouter = require('./src/routes/brand.route');
+const imgRouter = require('./src/routes/img.route');
+
+
 const cors = require('cors');
 const { setupSwagger } = require('./src/swagger');
 
@@ -16,6 +21,8 @@ app.use("/docs", express.static('/docs'));
 app.use('/', loginRouter);
 app.use('/products', productsRouter);
 app.use('/categories', categoriesRouter);
+app.use('/brand', brandRouter);
+app.use('/img', imgRouter);
 
 setupSwagger(app);
 
