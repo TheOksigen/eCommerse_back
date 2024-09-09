@@ -61,16 +61,16 @@ const prisma = new PrismaClient();
  */
 const createBrand = async (req, res) => {
     try {
-        const { name } = req.body;
+        const { name, slug } = req.body;
 
         if (!name) {
             res.status(400).json({ error: 'Brand name is required' });
             return;
         }
 
-        const newBrand = await prisma.brand.create({
+        const newBrand = await prisma.Brands.create({
             data: {
-                name,
+                name, slug
             },
         });
 
