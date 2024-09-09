@@ -21,7 +21,7 @@ app.use("/docs", express.static('/docs'));
 app.use('/', loginRouter);
 app.use('/products', productsRouter);
 app.use('/categories', categoriesRouter);
-app.use('/brand', brandRouter);
+app.use('/brands', brandRouter);
 app.use('/img', imgRouter);
 
 setupSwagger(app);
