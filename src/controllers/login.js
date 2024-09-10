@@ -69,7 +69,7 @@ const login = async (req, res) => {
 
         const token = jwt.sign({ userid: user.id }, process.env.JWT_SECRET, { expiresIn: '999999999h' });
 
-        res.status(200).json({ token });
+        res.status(200).json({ token, user });
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({ error: 'Failed to login' });
@@ -140,7 +140,7 @@ const addToCart = async (req, res) => {
             data: { cart: { connect: { id: productId } } },
         });
 
-        res.status(200).json({ message: 'Product added to cart' });
+        res.status(200).json({ message: 'Product added to cart', product: product });
     } catch (error) {
         console.error("Add to cart error:", error);
         res.status(500).json({ error: 'Failed to add product to cart' });

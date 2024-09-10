@@ -6,16 +6,17 @@ This backend API provides routes for managing Brands, Categories, Products, File
 
 All routes with `auth` middleware require a valid JWT token. You must include the token in the `Authorization` header.
 
-base url - [eCommerse.davidhtml.xyz](eCommerse.davidhtml.xyz) 
+domain - ecommerse.davidhtml.xyz
 
 ### Headers
+
 ```json
 {
   "Authorization": "Bearer <JWT_TOKEN>"
 }
 ```
 
-## Brand Routes 
+## Brand Routes
 
 | HTTP Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |
@@ -103,6 +104,25 @@ Content-Type: application/json
 | GET | `/products/category/:category` | Get products by category | No |
 | GET | `/products/subcategory/:subcategory` | Get products by subcategory | No |
 
+Məsələn, aşağıda verilən URL-də müxtəlif parametrlər ilə məhsul sorğusu həyata keçirilir:
+
+```bash
+GET /api/products?page=2&limit=5&sortBy=price&sortOrder=asc&categoryId=1&subcategoryId=3&brandId=2&colorId=4&sizeId=1&minPrice=50&maxPrice=500&discount=true
+```
+
+Bu URL aşağıdakıları edir:
+
+- **`page=2`**: İkinci səhifədə olan məhsulları gətirir.
+- **`limit=5`**: Hər səhifədə 5 məhsul göstərir.
+- **`sortBy=price` & `sortOrder=asc`**: Məhsulları qiymətə görə artan sıralama ilə sıralayır.
+- **`categoryId=1`**: 1-ci kateqoriyaya aid olan məhsulları filtr edir.
+- **`subcategoryId=3`**: 3-cü subkateqoriyaya aid olan məhsulları filtr edir.
+- **`brandId=2`**: 2-ci brendə aid olan məhsulları filtr edir.
+- **`colorId=4`**: 4-cü rəngə aid olan məhsulları filtr edir.
+- **`sizeId=1`**: 1-ci ölçüyə aid olan məhsulları filtr edir.
+- **`minPrice=50`** & **`maxPrice=500`**: Qiyməti 50 ilə 500 arasında olan məhsulları filtr edir.
+- **`discount=true`**: Endirimi olan məhsulları göstərir (yəni `discount > 0`).
+
 ### Example Request (Create Product)
 
 ```bash
@@ -121,7 +141,6 @@ Content-Type: application/json
   "colorsId": 1,
   "sizeId": 1,
 }
-
 ```
 
 ---
@@ -141,7 +160,6 @@ Content-Type: multipart/form-data
 {
   "image": <file>
 }
-
 ```
 
 ---
@@ -155,7 +173,16 @@ Content-Type: multipart/form-data
 | POST | `/auth/cart/add` | Add product to cart | Yes |
 | DELETE | `/auth/cart/delete/:itemId` | Remove product from cart | Yes |
 
-### Example Request (Register)
+### Example Request (Register and Login)
+
+```bash
+POST /auth/login
+Content-Type: application/json
+{
+  "username": "john_doe",
+  "password": "password123"
+}
+```
 
 ```bash
 POST /auth/register
@@ -170,7 +197,6 @@ Content-Type: application/json
   "email": "john@example.com",
   "password": "password123"
 }
-
 ```
 
 ### Example Request (Add to Cart)
@@ -183,13 +209,3 @@ Content-Type: application/json
 }
 
 ```
-
----
-
-### Notes for Frontend Developer:
-
-1. **Authentication**: All routes with the `auth` middleware require authentication. Ensure to include the JWT token in the headers for protected routes.
-2. **File Upload**: For image uploads, use `multipart/form-data` format.
-3. **Pagination and Filtering**: Use query parameters for filtering products (e.g., `search`, `category`, `subcategory`).
-
-This document provides a clear understanding of how to interact with the backend API from your frontend application.

@@ -98,7 +98,7 @@ const createProduct = async (req, res) => {
         res.status(500).json({ error: 'Failed to create product' });
     }
 };
-
+// ??????
 /**
  * @swagger
  * /products/all:
@@ -241,7 +241,6 @@ const getProducts = async (req, res) => {
                 Brands: true,
                 Colors: true,
                 Size: true,
-                User: true
             }
         });
 
@@ -305,52 +304,6 @@ const getProductById = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to fetch product' });
-    }
-};
-
-/**
- * @swagger
- * /products/{id}:
- *   put:
- *     summary: Update product by ID
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the product to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Product'
- *     responses:
- *       200:
- *         description: Product updated successfully
- *       400:
- *         description: Invalid input
- *       404:
- *         description: Product not found
- *       500:
- *         description: Failed to update product
- */
-const updateProduct = async (req, res) => {
-    try {
-        const updatedProduct = await prisma.product.update({
-            where: { id: Number(req.params.id) },
-            data: req.body
-        });
-        res.status(200).json(updatedProduct);
-    } catch (error) {
-        console.error(error);
-        if (error.code === 'P2025') {
-            res.status(404).json({ error: 'Product not found' });
-        } else {
-            res.status(500).json({ error: 'Failed to update product' });
-        }
     }
 };
 
@@ -446,7 +399,7 @@ const searchProduct = async (req, res) => {
     }
 };
 
-
+// ????
 /**
  * @swagger
  * /products/{id}:
@@ -588,10 +541,10 @@ const getProductsByCategory = async (req, res) => {
             include: {
                 category: true,
                 subcategory: true,
-                Brands: true,   
-                Colors: true,   
-                Size: true,     
-                User: true     
+                Brands: true,
+                Colors: true,
+                Size: true,
+                User: true
             }
         });
 
@@ -633,10 +586,10 @@ const getProductsBySubcategory = async (req, res) => {
             include: {
                 category: true,
                 subcategory: true,
-                Brands: true,   
-                Colors: true,   
-                Size: true,     
-                User: true     
+                Brands: true,
+                Colors: true,
+                Size: true,
+                User: true
             },
         });
 
@@ -651,14 +604,12 @@ const getProductsBySubcategory = async (req, res) => {
     }
 };
 
-
 module.exports = {
     createProduct,
     getProducts,
     getProductById,
     getProductsByCategory,
     getProductsBySubcategory,
-    updateProduct,
     deleteProductById,
     searchProduct,
     editProduct

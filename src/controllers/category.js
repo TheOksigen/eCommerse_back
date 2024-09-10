@@ -100,7 +100,13 @@ const createCategory = async (req, res) => {
  */
 const getCategories = async (req, res) => {
     try {
-        const categories = await prisma.category.findMany();
+        const categories = await prisma.category.findMany(
+            {
+                include: {
+                    Subcategory: true
+                }
+            }
+        );
         res.status(200).json(categories);
     } catch (error) {
         console.error(error);
