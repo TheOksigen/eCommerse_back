@@ -154,6 +154,7 @@ const getCategoriesById = async (req, res) => {
 
         const category = await prisma.category.findUnique({
             where: { id: categoryId },
+            include: { Subcategory: true }
         });
 
         if (category) {
