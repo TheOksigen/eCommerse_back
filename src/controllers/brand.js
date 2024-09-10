@@ -193,7 +193,7 @@ const updateBrandById = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, slug } = req.body;
-        
+
         const brand = await prisma.brands.findUnique({
             where: { id: +id },
         });

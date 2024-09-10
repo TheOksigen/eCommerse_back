@@ -210,26 +210,34 @@ const getProducts = async (req, res) => {
             discount
         } = req.query;
 
-        const pageNumber = parseInt(page);
-        const pageSize = parseInt(limit);
+        const pageNumber = parseInt(page) || 1;
+        const pageSize = parseInt(limit) || 10;
 
         const orderBy = {
             [sortBy]: sortOrder === 'asc' ? 'asc' : 'desc'
         };
 
+        // Building the `where` filter object
         const where = {};
 
         if (categoryId) where.categoryId = parseInt(categoryId);
         if (subcategoryId) where.subcategoryId = parseInt(subcategoryId);
         if (brandId) where.brandsId = parseInt(brandId);
-        if (color) where.Colors = color;
-        if (size) where.sizeId = size;
+
+        // Use Prisma enums for Colors and Size
+        if (color) where.Colors = { equals: color }; // or use enum mapping if needed
+        if (size) where.Size = { equals: size }; // Ensure this matches your enum
+
+        // Price filtering logic
         if (minPrice && maxPrice) where.price = { gte: parseFloat(minPrice), lte: parseFloat(maxPrice) };
         else if (minPrice) where.price = { gte: parseFloat(minPrice) };
         else if (maxPrice) where.price = { lte: parseFloat(maxPrice) };
+
+        // Discount filtering logic
         if (discount === 'true') where.discount = { gt: 0 };
         else if (discount === 'false') where.discount = 0;
 
+        // Fetching products with pagination
         const products = await prisma.product.findMany({
             where,
             orderBy,
@@ -241,9 +249,9 @@ const getProducts = async (req, res) => {
                 Brands: true,
             }
         });
-
+        
         const totalProducts = await prisma.product.count({ where });
-
+        
         res.status(200).json({
             data: products,
             meta: {
