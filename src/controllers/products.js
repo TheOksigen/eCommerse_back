@@ -203,8 +203,8 @@ const getProducts = async (req, res) => {
             categoryId,
             subcategoryId,
             brandId,
-            colorId,
-            sizeId,
+            color,
+            size,
             minPrice,
             maxPrice,
             discount
@@ -222,8 +222,8 @@ const getProducts = async (req, res) => {
         if (categoryId) where.categoryId = parseInt(categoryId);
         if (subcategoryId) where.subcategoryId = parseInt(subcategoryId);
         if (brandId) where.brandsId = parseInt(brandId);
-        if (colorId) where.colorsId = parseInt(colorId);
-        if (sizeId) where.sizeId = parseInt(sizeId);
+        if (color) where.Colors = color;
+        if (size) where.sizeId = size;
         if (minPrice && maxPrice) where.price = { gte: parseFloat(minPrice), lte: parseFloat(maxPrice) };
         else if (minPrice) where.price = { gte: parseFloat(minPrice) };
         else if (maxPrice) where.price = { lte: parseFloat(maxPrice) };
@@ -239,8 +239,6 @@ const getProducts = async (req, res) => {
                 category: true,
                 subcategory: true,
                 Brands: true,
-                Colors: true,
-                Size: true,
             }
         });
 
