@@ -98,7 +98,7 @@ const createProduct = async (req, res) => {
         res.status(500).json({ error: 'Failed to create product' });
     }
 };
-// ??????
+
 /**
  * @swagger
  * /products/all:
@@ -407,7 +407,7 @@ const searchProduct = async (req, res) => {
     }
 };
 
-// ????
+
 /**
  * @swagger
  * /products/{id}:
