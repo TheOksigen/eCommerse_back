@@ -55,7 +55,7 @@ const login = async (req, res) => {
             return res.status(400).json({ error: 'Username and password are required' });
         }
 
-        const user = await prisma.user.findUnique({ where: { username }, include: { cart: true } });
+        const user = await prisma.user.findFirst({ where: { username: username }, include: { cart: true } });
 
         if (!user) {
             return res.status(401).json({ error: 'Invalid username or password' });
