@@ -68,7 +68,7 @@ const createBrand = async (req, res) => {
             return;
         }
 
-        const newBrand = await prisma.Brands.create({
+        const newBrand = await prisma.brands.create({
             data: {
                 name, slug
             },
@@ -101,7 +101,7 @@ const createBrand = async (req, res) => {
  */
 const getBrands = async (req, res) => {
     try {
-        const brands = await prisma.Brands.findMany();
+        const brands = await prisma.brands.findMany();
         res.status(200).json(brands);
     } catch (error) {
         console.error("Get brands error:", error);
@@ -137,7 +137,7 @@ const getBrands = async (req, res) => {
 const getBrandById = async (req, res) => {
     try {
         const { id } = req.params;
-        const brand = await prisma.Brands.findUnique({
+        const brand = await prisma.brands.findUnique({
             where: { id: Number(id) },
         });
 
@@ -193,16 +193,16 @@ const updateBrandById = async (req, res) => {
     try {
         const { id } = req.params;
         const { name } = req.body;
-
-        const brand = await prisma.brBrandsand.findUnique({
-            where: { id: Number(id) },
+        
+        const brand = await prisma.brands.findUnique({
+            where: { id: +id },
         });
 
         if (!brand) {
             return res.status(404).json({ error: 'Brand not found' });
         }
 
-        const updatedBrand = await prisma.Brands.update({
+        const updatedBrand = await prisma.brands.update({
             where: { id: Number(id) },
             data: { name },
         });
@@ -239,7 +239,7 @@ const deleteBrandById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const brand = await prisma.Brands.findUnique({
+        const brand = await prisma.brands.findUnique({
             where: { id: Number(id) },
         });
 
@@ -247,7 +247,7 @@ const deleteBrandById = async (req, res) => {
             return res.status(404).json({ error: 'Brand not found' });
         }
 
-        await prisma.Brands.delete({
+        await prisma.brands.delete({
             where: { id: Number(id) },
         });
 
