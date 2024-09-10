@@ -29,15 +29,17 @@ enum eGender {
 model User {
   id       Int       @id @default(autoincrement())
   name     String
-  username String    @unique
-  phone    String    @unique
+  username String
+  phone    String
   address  String
   dob      DateTime
   gender   eGender
-  email    String    @unique
+  email    String
   password String
   cart     Product[]
   role     eUser     @default(USER)
+
+  @@unique([username, phone, email])
 }
 
 model Product {
@@ -51,10 +53,10 @@ model Product {
   categoryId    Int
   User          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
-  subcategoryId Int?
   subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
-  brandsId      Int
+  subcategoryId Int?
   Brands        Brands       @relation(fields: [brandsId], references: [id], onDelete: Cascade)
+  brandsId      Int
   Colors        Colors?      @relation(fields: [colorsId], references: [id], onDelete: Cascade)
   colorsId      Int?
   Size          Size?        @relation(fields: [sizeId], references: [id], onDelete: Cascade)
@@ -68,6 +70,8 @@ model Brands {
   name    String
   slug    String
   Product Product[]
+
+  @@unique([name, slug])
 }
 
 enum eColors {
