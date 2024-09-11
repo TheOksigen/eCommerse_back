@@ -101,13 +101,15 @@ Content-Type: application/json
 | PUT | `/products/update/:id` | Update a specific product by ID | Yes |
 | DELETE | `/products/delete/:id` | Delete a product by ID | Yes |
 | GET | `/products/search` | Search for a product | No |
-| GET | `/products/category/:category` | Get products by category | No |
-| GET | `/products/subcategory/:subcategory` | Get products by subcategory | No |
+| GET | `/products/category/:categoryid` | Get products by category | No |
+| GET | `/products/subcategory/:subcategoryid` | Get products by subcategory | No |
 
 Məsələn, aşağıda verilən URL-də müxtəlif parametrlər ilə məhsul sorğusu həyata keçirilir:
 
 ```bash
-GET /api/products?page=2&limit=5&sortBy=price&sortOrder=asc&categoryId=1&subcategoryId=3&brandId=2&colorId=4&sizeId=1&minPrice=50&maxPrice=500&discount=true
+GET products?page=2&limit=5&sortBy=price&sortOrder=asc&categoryId=1&subcategoryId=3&brandId=2&color=RED&size=XXL&minPrice=50&maxPrice=500&discount=true
+
+products?q=
 ```
 
 Bu URL aşağıdakıları edir:
@@ -135,11 +137,10 @@ Content-Type: application/json
   "price": 120,
   "images": ["url/image1.jpg", "url/image2.jpg"],
   "categoryId": 1,
-  "userId": 1,
   "subcategoryId": 1,
   "brandsId": 1,
-  "colorsId": 1,
-  "sizeId": 1,
+  "colors": "RED",
+  "size": "XXL",
 }
 ```
 
@@ -149,8 +150,8 @@ Content-Type: application/json
 
 | HTTP Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |
-| POST | `/files/upload` | Upload an image file | Yes |
-| DELETE | `/files/delete/:filename` | Delete a file by filename | Yes |
+| POST | `/img/upload` | Upload an image file | Yes |
+| DELETE | `/img/delete/:filename` | Delete a file by filename | Yes |
 
 ### Example Request (File Upload)
 
@@ -168,10 +169,10 @@ Content-Type: multipart/form-data
 
 | HTTP Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |
-| POST | `/auth/register` | Register a new user | No |
-| POST | `/auth/login` | Login a user | No |
-| POST | `/auth/cart/add` | Add product to cart | Yes |
-| DELETE | `/auth/cart/delete/:itemId` | Remove product from cart | Yes |
+| POST | `/register` | Register a new user | No |
+| POST | `/login` | Login a user | No |
+| POST | `/cart/add` | Add product to cart | Yes |
+| DELETE | `/cart/delete/:itemId` | Remove product from cart | Yes |
 
 ### Example Request (Register and Login)
 
