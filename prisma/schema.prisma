@@ -53,7 +53,7 @@ model Product {
   category      Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId    Int
   User          User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        Int
+  userId        Int?
   subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
   subcategoryId Int?
   Brands        Brands       @relation(fields: [brandsId], references: [id], onDelete: Cascade)
