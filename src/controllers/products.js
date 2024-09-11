@@ -88,16 +88,28 @@ const prisma = new PrismaClient();
  *         description: Failed to create product
  */
 const createProduct = async (req, res) => {
-    try {
+    try {        
         const newProduct = await prisma.product.create({
-            data: req.body
+            data: {
+                name: req.body.name,
+                description: req.body.description,
+                price: parseFloat(req.body.price), // Ensure price is a float
+                discount: parseInt(req.body.discount, 10), // Ensure discount is an integer
+                images: req.body.images, // Assuming this is an array of strings
+                categoryId: parseInt(req.body.categoryId, 10), // Ensure categoryId is an integer
+                subcategoryId: req.body.subcategoryId ? parseInt(req.body.subcategoryId, 10) : null, // Optional
+                brandsId: parseInt(req.body.brandsId, 10), // Ensure brandsId is an integer
+                Colors: req.body.colors, // This should be a valid eColors enum value
+                Size: req.body.size, // This should be a valid eSize enum value
+            },
         });
-        res.status(201).json(newProduct);
+        res.status(201).json({ message: "Succses", newProduct });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to create product' });
     }
 };
+
 
 /**
  * @swagger
