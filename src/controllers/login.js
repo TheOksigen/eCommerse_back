@@ -256,7 +256,7 @@ const deleteCart = async (req, res) => {
  */
 const register = async (req, res) => {
     try {
-        const { name, username, phone, address, dob, gender, email, password } = req.body;
+        const { name, user_img , username, phone, address, dob, gender, email, password } = req.body;
 
         if (!name || !username || !phone || !address || !dob || !gender || !email || !password) {
             return res.status(400).json({ error: 'All fields are required' });
@@ -276,6 +276,7 @@ const register = async (req, res) => {
             data: {
                 name,
                 username,
+                user_img,
                 phone,
                 address,
                 dob: new Date(dob),
