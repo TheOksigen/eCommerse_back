@@ -30,17 +30,15 @@ model User {
   id       Int       @id @default(autoincrement())
   user_img String?   @default("https://i.pinimg.com/originals/1f/28/c6/1f28c68d2c35f389966b5a363b992d06.png")
   name     String
-  username String
-  phone    String
+  username String    @unique()
+  phone    String    @unique()
   address  String?
   dob      DateTime?
   gender   eGender
-  email    String
+  email    String    @unique()
   password String
   cart     Product[]
   role     eUser     @default(USER)
-
-  @@unique([username, phone, email])
 }
 
 model Product {
