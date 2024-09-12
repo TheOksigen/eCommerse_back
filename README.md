@@ -138,8 +138,8 @@ Content-Type: application/json
   "categoryId": 1,
   "subcategoryId": 1,
   "brandsId": 1,
-  "colors": "RED",
-  "size": "XXL",
+  "colors": ["RED", "BLUE"],
+  "size": ["XXL", "L"],
 }
 ```
 
