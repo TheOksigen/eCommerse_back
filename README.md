@@ -107,9 +107,8 @@ Content-Type: application/json
 Məsələn, aşağıda verilən URL-də müxtəlif parametrlər ilə məhsul sorğusu həyata keçirilir:
 
 ```bash
-GET products?page=2&limit=5&sortBy=price&sortOrder=asc&categoryId=1&subcategoryId=3&brandId=2&color=RED&size=XXL&minPrice=50&maxPrice=500&discount=true
+GET /products?page=1&limit=10&color=RED,GREEN&size=S,M&minPrice=10&maxPrice=100&discount=true
 
-products?q=
 ```
 
 Bu URL aşağıdakıları edir:
