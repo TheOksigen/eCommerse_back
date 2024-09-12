@@ -222,8 +222,8 @@ const getProducts = async (req, res) => {
             discount
         } = req.query;
 
-        const pageNumber = parseInt(page) || 1;
-        const pageSize = parseInt(limit) || 10;
+        const pageNumber = parseInt(page, 10) || 1;
+        const pageSize = parseInt(limit, 10) || 10;
 
         const orderBy = {
             [sortBy]: sortOrder === 'asc' ? 'asc' : 'desc'
@@ -231,13 +231,19 @@ const getProducts = async (req, res) => {
 
         const where = {};
 
-        if (categoryId) where.categoryId = parseInt(categoryId);
-        if (subcategoryId) where.subcategoryId = parseInt(subcategoryId);
-        if (brandId) where.brandsId = parseInt(brandId);
+        if (categoryId) where.categoryId = parseInt(categoryId, 10);
+        if (subcategoryId) where.subcategoryId = parseInt(subcategoryId, 10);
+        if (brandId) where.brandsId = parseInt(brandId, 10);
 
-        if (color) where.Colors = color;
+        if (color) {
+            const colorsArray = color.split(',').map(c => c.trim().toUpperCase());
+            where.Colors = { hasSome: colorsArray };
+        }
 
-        if (size) where.Size = size;
+        if (size) {
+            const sizeArray = size.split(',').map(s => s.trim().toUpperCase());
+            where.Size = { hasSome: sizeArray };
+        }
 
         if (minPrice && maxPrice) where.price = { gte: parseFloat(minPrice), lte: parseFloat(maxPrice) };
         else if (minPrice) where.price = { gte: parseFloat(minPrice) };
@@ -274,6 +280,7 @@ const getProducts = async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch products' });
     }
 };
+
 
 /**
  * @swagger

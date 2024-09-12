@@ -282,8 +282,7 @@ const register = async (req, res) => {
                 dob: dob ? new Date(dob) : null, 
                 gender,
                 email,
-                password: hashedPassword,
-                cart: [],
+                password: hashedPassword,                
             },
         });
         
