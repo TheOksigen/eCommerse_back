@@ -314,9 +314,6 @@ const getProductById = async (req, res) => {
                 category: true,
                 subcategory: true,
                 Brands: true,
-                Colors: true,
-                Size: true,
-                User: true
             }
         });
         if (product) res.status(200).json(product);
