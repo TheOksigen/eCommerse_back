@@ -235,22 +235,17 @@ const getProducts = async (req, res) => {
         if (subcategoryId) where.subcategoryId = parseInt(subcategoryId);
         if (brandId) where.brandsId = parseInt(brandId);
 
-        // Assuming `Colors` is a string field
         if (color) where.Colors = color;
 
-        // Assuming `Size` is a string field or enum
         if (size) where.Size = size;
 
-        // Price range filtering
         if (minPrice && maxPrice) where.price = { gte: parseFloat(minPrice), lte: parseFloat(maxPrice) };
         else if (minPrice) where.price = { gte: parseFloat(minPrice) };
         else if (maxPrice) where.price = { lte: parseFloat(maxPrice) };
 
-        // Discount filtering
         if (discount === 'true') where.discount = { gt: 0 };
         else if (discount === 'false') where.discount = 0;
 
-        // Fetch products with pagination and filtering
         const products = await prisma.product.findMany({
             where,
             orderBy,
@@ -260,7 +255,6 @@ const getProducts = async (req, res) => {
                 category: true,
                 subcategory: true,
                 Brands: true,
-                // Remove this if `Colors` is not a relation but a simple field
             }
         });
 

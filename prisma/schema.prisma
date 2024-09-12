@@ -58,8 +58,8 @@ model Product {
   subcategoryId Int?
   Brands        Brands       @relation(fields: [brandsId], references: [id], onDelete: Cascade)
   brandsId      Int
-  Colors        eColors[]
-  Size          eSize[]
+  Colors        eColors[]    @default([])
+  Size          eSize[]      @default([])
   createdTime   DateTime     @default(now())
   updatedTime   DateTime     @updatedAt
 
