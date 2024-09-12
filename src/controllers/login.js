@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const prisma = require('../utils/prismaClient');
+
+const sendWelcomeEmail = require('../email/email');
 dotenv.config();
 
 /**
@@ -261,7 +263,7 @@ const register = async (req, res) => {
         if (!name || !username || !phone || !gender || !email || !password) {
             return res.status(400).json({ error: 'All required fields must be filled' });
         }
-        
+
         const existingUser = await prisma.user.findFirst({
             where: { OR: [{ username }, { email }] },
         });
@@ -269,9 +271,9 @@ const register = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ error: 'Username or email is already taken' });
         }
-        
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         const newUser = await prisma.user.create({
             data: {
                 name,
@@ -279,15 +281,17 @@ const register = async (req, res) => {
                 user_img: user_img || 'https://i.pinimg.com/originals/1f/28/c6/1f28c68d2c35f389966b5a363b992d06.png',
                 phone,
                 address: address || null,
-                dob: dob ? new Date(dob) : null, 
+                dob: dob ? new Date(dob) : null,
                 gender,
                 email,
-                password: hashedPassword,                
+                password: hashedPassword,
             },
         });
-        
+
         const token = jwt.sign({ userid: newUser.id }, process.env.JWT_SECRET, { expiresIn: '99999999h' });
-        
+
+        await sendWelcomeEmail(newUser.email, newUser.name);
+
         res.status(201).json({ token, message: 'User registered successfully', user: newUser });
     } catch (error) {
         console.error("Register error:", error);
