@@ -477,10 +477,10 @@ const searchProduct = async (req, res) => {
 const editProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(req.body);
+        
         const updatedProduct = await prisma.product.update({
             where: {
-                id: parseInt(id) // Make sure the id is parsed correctly
+                id: parseInt(id) 
             },
             data: {
                 name: req.body.name,
@@ -489,20 +489,20 @@ const editProduct = async (req, res) => {
                 discount: req.body.discount,
                 images: req.body.images,
                 category: {
-                    connect: { id: req.body.categoryId } 
+                    connect: { id: req.body.categoryId }
                 },
-                subcategory: req.body.subcategoryId ? {
-                    connect: { id: req.body.subcategoryId } 
-                } : undefined,
+                subcategory: {
+                    connect: { id: req.body.subcategoryId }
+                },
                 Brands: {
                     connect: { id: req.body.brandsId }
                 },
                 Colors: {
-                    set: req.body.colors 
+                    set: req.body.colors
                 },
                 Size: {
-                    set: req.body.size 
-                },                
+                    set: req.body.size
+                },
             }
         });
         res.json(updatedProduct);
