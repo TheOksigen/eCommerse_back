@@ -256,44 +256,46 @@ const deleteCart = async (req, res) => {
  */
 const register = async (req, res) => {
     try {
-        const { name, user_img , username, phone, address, dob, gender, email, password } = req.body;
+        const { name, user_img, username, phone, address, dob, gender, email, password } = req.body;
 
-        if (!name || !username || !phone || !address || !dob || !gender || !email || !password) {
-            return res.status(400).json({ error: 'All fields are required' });
+        if (!name || !username || !phone || !gender || !email || !password) {
+            return res.status(400).json({ error: 'All required fields must be filled' });
         }
-
+        
         const existingUser = await prisma.user.findFirst({
             where: { OR: [{ username }, { email }] },
         });
 
         if (existingUser) {
-            return res.status(400).json({ error: 'Username or email already taken' });
+            return res.status(400).json({ error: 'Username or email is already taken' });
         }
-
+        
         const hashedPassword = await bcrypt.hash(password, 10);
-
+        
         const newUser = await prisma.user.create({
             data: {
                 name,
                 username,
-                user_img,
+                user_img: user_img || 'https://i.pinimg.com/originals/1f/28/c6/1f28c68d2c35f389966b5a363b992d06.png',
                 phone,
-                address,
-                dob: new Date(dob),
+                address: address || null,
+                dob: dob ? new Date(dob) : null, 
                 gender,
                 email,
                 password: hashedPassword,
+                cart: [],
             },
         });
-
-        const token = jwt.sign({ userid: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+        
+        const token = jwt.sign({ userid: newUser.id }, process.env.JWT_SECRET, { expiresIn: '99999999h' });
+        
         res.status(201).json({ token, message: 'User registered successfully', user: newUser });
     } catch (error) {
         console.error("Register error:", error);
         res.status(500).json({ error: 'Failed to register user' });
     }
 };
+
 
 
 module.exports = {
