@@ -88,7 +88,7 @@ const prisma = new PrismaClient();
  *         description: Failed to create product
  */
 const createProduct = async (req, res) => {
-    try {        
+    try {
         const newProduct = await prisma.product.create({
             data: {
                 name: req.body.name,
@@ -477,21 +477,40 @@ const searchProduct = async (req, res) => {
 const editProduct = async (req, res) => {
     try {
         const { id } = req.params;
+        console.log(req.body);
         const updatedProduct = await prisma.product.update({
-            where: { id: Number(id) },
-            data: req.body,
+            where: {
+                id: parseInt(id) // Make sure the id is parsed correctly
+            },
+            data: {
+                name: req.body.name,
+                description: req.body.description,
+                price: req.body.price,
+                discount: req.body.discount,
+                images: req.body.images,
+                category: {
+                    connect: { id: req.body.categoryId } 
+                },
+                subcategory: req.body.subcategoryId ? {
+                    connect: { id: req.body.subcategoryId } 
+                } : undefined,
+                Brands: {
+                    connect: { id: req.body.brandsId }
+                },
+                Colors: {
+                    set: req.body.colors 
+                },
+                Size: {
+                    set: req.body.size 
+                },                
+            }
         });
-
-        res.status(200).json(updatedProduct);
+        res.json(updatedProduct);
     } catch (error) {
         console.error(error);
-
-        if (error instanceof Error && error.name === 'NotFoundError') {
-            res.status(404).json({ error: 'Product not found' });
-        } else {
-            res.status(500).json({ error: 'Failed to update product' });
-        }
+        res.status(500).json({ error: 'Failed to update product' });
     }
+
 };
 
 /**
