@@ -485,8 +485,8 @@ const editProduct = async (req, res) => {
             data: {
                 name: req.body.name,
                 description: req.body.description,
-                price: req.body.price,
-                discount: req.body.discount,
+                price: +req.body.price,
+                discount: +req.body.discount,
                 images: req.body.images,
                 category: {
                     connect: { id: req.body.categoryId }
