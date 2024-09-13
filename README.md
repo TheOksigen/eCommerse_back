@@ -104,14 +104,14 @@ axios.delete('/cart/delete/1', {
 ```jsx
 axios.get('/products/search', {
     params: {
-        page: 2,              // Paginate to the second page
-        limit: 5,             // Limit results to 5 products per page
+        page: 2,              // Paginate to the second page default (1)
+        limit: 5,             // Limit results to 5 products per page default 10
         sortBy: 'price',      // Sort products by price
         sortOrder: 'asc',     // Sort in ascending order
         categoryId: 1,        // Filter by category ID
         brandId: 2,           // Filter by brand ID
         color: ['red'],       // Filter by color ID
-        sizeId: 1,            // Filter by size ID
+        size: ['XXL', 'L'],   // Filter by size ID
         minPrice: 50,         // Minimum price
         maxPrice: 500,        // Maximum price
         discount: true        // Filter to show products with discounts
@@ -129,8 +129,7 @@ axios.get('/products/search', {
 **Example URL**:
 
 ```
-<https://ecommerse.davidhtml.xyz/products/search?page=2&limit=5&sortBy=price&sortOrder=asc&categoryId=1&brandId=2&color[]=red&sizeId=1&minPrice=50&maxPrice=500&discount=true>
-
+https://ecommerse.davidhtml.xyz/products/search?page=2&limit=5&sortBy=price&sortOrder=asc&categoryId=1&brandId=2&color=RED,BLUE&size=XXL,L&minPrice=50&maxPrice=500&discount=true
 ```
 
 ---
@@ -149,7 +148,9 @@ axios.get('/products/search', {
 
 ```jsx
 axios.post('/categories/create', {
-    name: "Category Name"
+    name: "Category Name",
+    slug: "category_name"
+    
 }, {
     headers: {
         Authorization: 'Bearer <JWT_TOKEN>'
@@ -173,6 +174,7 @@ axios.post('/categories/create', {
 ```jsx
 axios.post('/categories/subcategory/create', {
     name: "Subcategory Name",
+    slug: "subcategory_name"
     categoryId: 1
 }, {
     headers: {
