@@ -199,7 +199,7 @@ const addToCart = async (req, res) => {
  */
 const deleteCart = async (req, res) => {
     try {
-        const { itemId } = req.body;
+        const { itemId } = req.params;
 
         if (!itemId) {
             return res.status(400).json({ error: 'Item ID is required' });
