@@ -1,211 +1,236 @@
-# API Documentation for Frontend Developers
+Here's the updated API documentation including the new endpoint for deleting a cart item:
 
-This backend API provides routes for managing Brands, Categories, Products, File uploads, and User Authentication. Below are the descriptions of each available endpoint along with their HTTP methods, example requests, and brief instructions.
+---
 
-## Authentication Middleware
+**eCommerce API Documentation for Frontend Developers**
 
-All routes with `auth` middleware require a valid JWT token. You must include the token in the `Authorization` header.
+This backend API provides routes for **User Authentication**, **Products**, **Categories**, **Subcategories**, **Brands**, and **Cart Management**. Below is a detailed description of each available endpoint, HTTP methods, example requests, and instructions.
 
-domain - ecommerse.davidhtml.xyz
+## **Base URL**
 
-### Headers
+```
+<https://ecommerse.davidhtml.xyz>
 
-```json
-{
-  "Authorization": "Bearer <JWT_TOKEN>"
-}
 ```
 
-## Brand Routes
+### **Headers**
 
-| HTTP Method | Endpoint | Description | Auth Required |
-| --- | --- | --- | --- |
-| POST | `/brands/create` | Create a new brand | Yes |
-| GET | `/brands/all` | Get a list of all brands | No |
-| GET | `/brands/get/:id` | Get a specific brand by ID | No |
-| PUT | `/brands/update/:id` | Update a specific brand by ID | Yes |
-| DELETE | `/brands/delete/:id` | Delete a brand by ID | Yes |
+For routes that require authentication, include a valid JWT token in the `Authorization` header:
 
-### Example Request (Create Brand)
-
-```bash
-POST /brands/create
-Content-Type: application/json
-{
-  "name": "Nike", // interface de istifade etmek ucundur
-  "slug": "nike" // routerde istifade etmek ucundur 
-}
 ```
-
-### Example Request (Update Brand)
-
-```bash
-PUT /brands/update/1
-Content-Type: application/json
-{
-  "name": "Adidas",
-  "slug": "nike"
-}
+Authorization: Bearer <JWT_TOKEN>
 
 ```
 
 ---
 
-## Category Routes
+## **User Authentication Routes**
 
 | HTTP Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |
-| POST | `/categories/create` | Create a new category | Yes |
-| GET | `/categories/all` | Get a list of all categories | No |
-| GET | `/categories/get/:id` | Get a specific category by ID | No |
-| PUT | `/categories/update/:id` | Update a specific category by ID | Yes |
-| DELETE | `/categories/delete/:id` | Delete a category by ID | Yes |
-| POST | `/categories/subcategory/create` | Create a subcategory | Yes |
-| PUT | `/categories/subcategory/update/:id` | Update a subcategory by ID | Yes |
-| DELETE | `/categories/subcategory/delete/:id` | Delete a subcategory by ID | Yes |
+| **POST** | `/register` | Register a new user | No |
+| **POST** | `/login` | Login a user | No |
+| **POST** | `/cart/add` | Add product to cart | Yes |
+| **DELETE** | `/cart/delete/:itemId` | Remove product from cart | Yes |
 
-### Example Request (Create Category)
+### **Example Request: Register**
 
-```bash
-POST /categories/create
-Content-Type: application/json
-{
-  "name": "Shoes",
-  "slug": "shoes"
-}
+```jsx
+axios.post('/register', {
+    name: "John Doe",
+    username: "johndoe",
+    phone: "+1234567890",
+    address: "123 Main St, Anytown, USA",
+    dob: "1990-01-01",
+    gender: "male",
+    email: "johndoe@example.com",
+    password: "securepassword"
+});
 
 ```
 
-### Example Request (Create Subcategory)
+### **Example Request: Login**
 
-```bash
-POST /categories/subcategory/create
-Content-Type: application/json
-{
-  "name": "Sneakers",
-  "slug": "sneakers",
-  "categoryId": 1
-}
+```jsx
+axios.post('/login', {
+    email: "john@example.com",
+    password: "password123"
+});
+
+```
+
+### **Example Request: Add to Cart**
+
+```jsx
+axios.post('/cart/add', {
+    productId: 1,  // Product ID
+    quantity: 2    // mehsulun sayi defauld olaraq 1dir 
+}, {
+    headers: {
+        Authorization: 'Bearer <JWT_TOKEN>'
+    }
+});
+
+```
+
+### **Example Request: Delete from Cart**
+
+```jsx
+axios.delete('/cart/delete/1', {
+    headers: {
+        Authorization: 'Bearer <JWT_TOKEN>'
+    }
+});
 
 ```
 
 ---
 
-## Product Routes
+## **Product Routes**
 
 | HTTP Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |
-| POST | `/products/create` | Create a new product | Yes |
-| GET | `/products/all` | Get a list of all products | No |
-| GET | `/products/get/:id` | Get a specific product by ID | No |
-| PUT | `/products/update/:id` | Update a specific product by ID | Yes |
-| DELETE | `/products/delete/:id` | Delete a product by ID | Yes |
-| GET | `/products/search` | Search for a product | No |
-| GET | `/products/category/:categoryid` | Get products by category | No |
-| GET | `/products/subcategory/:subcategoryid` | Get products by subcategory | No |
+| **POST** | `/products/create` | Create a new product | Yes |
+| **GET** | `/products/all` | Get a list of all products | No |
+| **GET** | `/products/get/:id` | Get a specific product by ID | No |
+| **PUT** | `/products/update/:id` | Update a specific product by ID | Yes |
+| **DELETE** | `/products/delete/:id` | Delete a product by ID | Yes |
+| **GET** | `/products/search` | Search for products | No |
+| **GET** | `/products/category/:categoryid` | Get products by category | No |
+| **GET** | `/products/subcategory/:subcategoryid` | Get products by subcategory | No |
 
-Məsələn, aşağıda verilən URL-də müxtəlif parametrlər ilə məhsul sorğusu həyata keçirilir:
+### **Example Request: Get Products with Filters and Sorting**
 
-```bash
-GET /products?page=1&limit=10&color=RED,GREEN&size=S,M&minPrice=10&maxPrice=100&discount=true
+```jsx
+axios.get('/products/search', {
+    params: {
+        page: 2,              // Paginate to the second page
+        limit: 5,             // Limit results to 5 products per page
+        sortBy: 'price',      // Sort products by price
+        sortOrder: 'asc',     // Sort in ascending order
+        categoryId: 1,        // Filter by category ID
+        brandId: 2,           // Filter by brand ID
+        color: ['red'],       // Filter by color ID
+        sizeId: 1,            // Filter by size ID
+        minPrice: 50,         // Minimum price
+        maxPrice: 500,        // Maximum price
+        discount: true        // Filter to show products with discounts
+    }
+})
+.then(response => {
+    console.log(response.data);
+})
+.catch(error => {
+    console.error('Error fetching filtered products:', error);
+});
 
 ```
 
-Bu URL aşağıdakıları edir:
+**Example URL**:
 
-- **`page=2`**: İkinci səhifədə olan məhsulları gətirir.
-- **`limit=5`**: Hər səhifədə 5 məhsul göstərir.
-- **`sortBy=price` & `sortOrder=asc`**: Məhsulları qiymətə görə artan sıralama ilə sıralayır.
-- **`categoryId=1`**: 1-ci kateqoriyaya aid olan məhsulları filtr edir.
-- **`subcategoryId=3`**: 3-cü subkateqoriyaya aid olan məhsulları filtr edir.
-- **`brandId=2`**: 2-ci brendə aid olan məhsulları filtr edir.
-- **`colorId=4`**: 4-cü rəngə aid olan məhsulları filtr edir.
-- **`sizeId=1`**: 1-ci ölçüyə aid olan məhsulları filtr edir.
-- **`minPrice=50`** & **`maxPrice=500`**: Qiyməti 50 ilə 500 arasında olan məhsulları filtr edir.
-- **`discount=true`**: Endirimi olan məhsulları göstərir (yəni `discount > 0`).
+```
+<https://ecommerse.davidhtml.xyz/products/search?page=2&limit=5&sortBy=price&sortOrder=asc&categoryId=1&brandId=2&color[]=red&sizeId=1&minPrice=50&maxPrice=500&discount=true>
 
-### Example Request (Create Product)
-
-```bash
-POST /products/create
-Content-Type: application/json
-{
-  "name": "Air Max",
-  "description": "Comfortable running shoes",
-  "discount": 10,
-  "price": 120,
-  "images": ["url/image1.jpg", "url/image2.jpg"],
-  "categoryId": 1,
-  "subcategoryId": 1,
-  "brandsId": 1,
-  "colors": ["RED", "BLUE"],
-  "size": ["XXL", "L"],
-}
 ```
 
 ---
 
-## File Upload Routes
+## **Category Routes**
 
 | HTTP Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |
-| POST | `/img/upload` | Upload an image file | Yes |
-| DELETE | `/img/delete/:filename` | Delete a file by filename | Yes |
+| **POST** | `/categories/create` | Create a new category | Yes |
+| **GET** | `/categories/all` | Get a list of all categories | No |
+| **GET** | `/categories/get/:id` | Get a specific category by ID | No |
+| **PUT** | `/categories/update/:id` | Update a specific category by ID | Yes |
+| **DELETE** | `/categories/delete/:id` | Delete a category by ID | Yes |
 
-### Example Request (File Upload)
+### **Example Request: Create Category**
 
-```bash
-POST /files/upload
-Content-Type: multipart/form-data
-{
-  "image": <file>
-}
+```jsx
+axios.post('/categories/create', {
+    name: "Category Name"
+}, {
+    headers: {
+        Authorization: 'Bearer <JWT_TOKEN>'
+    }
+});
+
 ```
 
 ---
 
-## User Authentication Routes
+## **Subcategory Routes**
 
 | HTTP Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |
-| POST | `/register` | Register a new user | No |
-| POST | `/login` | Login a user | No |
-| POST | `/cart/add` | Add product to cart | Yes |
-| DELETE | `/cart/delete/:itemId` | Remove product from cart | Yes |
+| **POST** | `/categories/subcategory/create` | Create a subcategory | Yes |
+| **PUT** | `/categories/subcategory/update/:id` | Update a subcategory by ID | Yes |
+| **DELETE** | `/categories/subcategory/delete/:id` | Delete a subcategory by ID | Yes |
 
-### Example Request (Register and Login)
+### **Example Request: Create Subcategory**
 
-```bash
-POST /auth/login
-Content-Type: application/json
-{
-  "username": "john_doe",
-  "password": "password123"
-}
-```
-
-```bash
-POST /auth/register
-Content-Type: application/json
-{
-  "name": "John Doe",
-  "username": "john_doe",
-  "phone": "1234567890",
-  "address": "123 Main St",
-  "dob": "1990-01-01T00:00:00Z",
-  "gender": "MALE",
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
-### Example Request (Add to Cart)
-
-```bash
-POST /auth/cart/add
-Content-Type: application/json
-{
-  "productId": 1
-}
+```jsx
+axios.post('/categories/subcategory/create', {
+    name: "Subcategory Name",
+    categoryId: 1
+}, {
+    headers: {
+        Authorization: 'Bearer <JWT_TOKEN>'
+    }
+});
 
 ```
+
+---
+
+## **Brand Routes**
+
+| HTTP Method | Endpoint | Description | Auth Required |
+| --- | --- | --- | --- |
+| **POST** | `/brands/create` | Create a new brand | Yes |
+| **GET** | `/brands/all` | Get a list of all brands | No |
+| **GET** | `/brands/get/:id` | Get a specific brand by ID | No |
+| **PUT** | `/brands/update/:id` | Update a specific brand by ID | Yes |
+| **DELETE** | `/brands/delete/:id` | Delete a brand by ID | Yes |
+
+### **Example Request: Create Brand**
+
+```jsx
+axios.post('/brands/create', {
+    name: "Brand Name"
+}, {
+    headers: {
+        Authorization: 'Bearer <JWT_TOKEN>'
+    }
+});
+
+```
+
+---
+
+## **File Upload Routes**
+
+| HTTP Method | Endpoint | Description | Auth Required |
+| --- | --- | --- | --- |
+| **POST** | `/img/upload` | Upload an image file | Yes |
+| **DELETE** | `/img/delete/:filename` | Delete a file by filename | Yes |
+
+### **Example Request: File Upload**
+
+```jsx
+const formData = new FormData();
+formData.append('file', file);
+
+axios.post('/img/upload', formData, {
+    headers: {
+        Authorization: 'Bearer <JWT_TOKEN>',
+        'Content-Type': 'multipart/form-data'
+    }
+});
+
+```
+
+---
+
+This documentation should help frontend developers integrate with the API effectively.

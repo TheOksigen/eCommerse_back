@@ -111,7 +111,7 @@ const login = async (req, res) => {
  */
 const addToCart = async (req, res) => {
     try {
-        const { productId } = req.body;
+        const { productId, count = 1 } = req.body;
 
         if (!productId) {
             return res.status(400).json({ error: 'Product ID is required' });
@@ -137,17 +137,36 @@ const addToCart = async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        await prisma.user.update({
-            where: { id: user.id },
-            data: { cart: { connect: { id: productId } } },
+        const cartItem = await prisma.cart.findFirst({
+            where: {
+                userId: user.id,
+                productId: product.id,
+            },
         });
 
-        res.status(200).json({ message: 'Product added to cart', product: product });
+        if (cartItem) {
+            await prisma.cart.update({
+                where: { id: cartItem.id },
+                data: { count: cartItem.count + count },
+            });
+        } else {
+            // Add new product to cart
+            await prisma.cart.create({
+                data: {
+                    userId: user.id,
+                    productId: product.id,
+                    count: count,
+                },
+            });
+        }
+
+        res.status(200).json({ message: 'Product added to cart', product });
     } catch (error) {
         console.error("Add to cart error:", error);
         res.status(500).json({ error: 'Failed to add product to cart' });
     }
 };
+
 
 /**
  * @swagger
@@ -180,23 +199,39 @@ const addToCart = async (req, res) => {
  */
 const deleteCart = async (req, res) => {
     try {
-        if (!req.user || !req.user.id) {
-            return res.status(400).json({ error: 'User ID is required' });
-        }
-        const userId = Number(req.user.id);
         const { itemId } = req.body;
 
         if (!itemId) {
             return res.status(400).json({ error: 'Item ID is required' });
         }
 
-        await prisma.user.update({
-            where: { id: userId },
-            data: {
-                cart: {
-                    disconnect: { id: itemId },
-                },
+        const authHeader = req.headers['authorization'];
+        if (!authHeader) {
+            return res.status(401).json({ error: 'Unauthorized: No token provided' });
+        }
+
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await prisma.user.findUnique({ where: { id: decoded.userid } });
+
+        if (!user) {
+            return res.status(401).json({ error: 'Unauthorized: Invalid user' });
+        }
+
+        const cartItem = await prisma.cart.findFirst({
+            where: {
+                userId: user.id,
+                productId: itemId,
             },
+        });
+
+        if (!cartItem) {
+            return res.status(404).json({ error: 'Item not found in cart' });
+        }
+
+        await prisma.cart.delete({
+            where: { id: cartItem.id },
         });
 
         res.status(200).json({ message: 'Item removed from cart successfully' });
@@ -205,6 +240,7 @@ const deleteCart = async (req, res) => {
         res.status(500).json({ error: 'Failed to remove item from cart' });
     }
 };
+
 
 /**
  * @swagger
@@ -282,7 +318,7 @@ const register = async (req, res) => {
                 phone,
                 address: address || null,
                 dob: dob ? new Date(dob) : null,
-                gender,
+                gender: gender.toUpperCase(),
                 email,
                 password: hashedPassword,
             },
