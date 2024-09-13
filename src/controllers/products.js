@@ -477,7 +477,7 @@ const searchProduct = async (req, res) => {
 const editProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        
+        console.log(req.body)
         const updatedProduct = await prisma.product.update({
             where: {
                 id: parseInt(id) 
