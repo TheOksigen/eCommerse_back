@@ -1,92 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     Product:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         name:
- *           type: string
- *           example: "Product Name"
- *         description:
- *           type: string
- *           example: "This is a sample product description."
- *         discount:
- *           type: integer
- *           example: 10
- *         price:
- *           type: number
- *           format: float
- *           example: 99.99
- *         images:
- *           type: array
- *           items:
- *             type: string
- *             example: "https://example.com/image1.jpg"
- *         categoryId:
- *           type: integer
- *           example: 2
- *         userId:
- *           type: integer
- *           nullable: true
- *           example: 3
- *         subcategoryId:
- *           type: integer
- *           example: 4
- *         brandId:
- *           type: integer
- *           example: 5
- *         colorId:
- *           type: integer
- *           nullable: true
- *           example: 6
- *         sizeId:
- *           type: integer
- *           nullable: true
- *           example: 7
- *         createdTime:
- *           type: string
- *           format: date-time
- *           example: "2024-08-31T12:00:00Z"
- *         updatedTime:
- *           type: string
- *           format: date-time
- *           example: "2024-08-31T12:30:00Z"
- *       required:
- *         - name
- *         - description
- *         - price
- *         - categoryId
- *         - subcategoryId
- *         - brandId
- *         - createdTime
- *         - updatedTime
- */
-
-/**
- * @swagger
- * /products:
- *   post:
- *     summary: Create a new product
- *     tags: [Products]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Product'
- *     responses:
- *       201:
- *         description: The product was created successfully
- *       500:
- *         description: Failed to create product
- */
 const createProduct = async (req, res) => {
     try {
         const newProduct = await prisma.product.create({
@@ -110,101 +23,6 @@ const createProduct = async (req, res) => {
     }
 };
 
-
-/**
- * @swagger
- * /products/all:
- *   get:
- *     summary: Get all products
- *     tags: [Products]
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *         description: Page number for pagination
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *         description: Number of products per page
- *       - in: query
- *         name: sortBy
- *         schema:
- *           type: string
- *         description: Field to sort by
- *       - in: query
- *         name: sortOrder
- *         schema:
- *           type: string
- *           enum: [asc, desc]
- *         description: Order of sorting
- *       - in: query
- *         name: categoryId
- *         schema:
- *           type: integer
- *         description: Filter by category ID
- *       - in: query
- *         name: subcategoryId
- *         schema:
- *           type: integer
- *         description: Filter by subcategory ID
- *       - in: query
- *         name: brandId
- *         schema:
- *           type: integer
- *         description: Filter by brand ID
- *       - in: query
- *         name: colorId
- *         schema:
- *           type: integer
- *         description: Filter by color ID
- *       - in: query
- *         name: sizeId
- *         schema:
- *           type: integer
- *         description: Filter by size ID
- *       - in: query
- *         name: minPrice
- *         schema:
- *           type: number
- *         description: Minimum price filter
- *       - in: query
- *         name: maxPrice
- *         schema:
- *           type: number
- *         description: Maximum price filter
- *       - in: query
- *         name: discount
- *         schema:
- *           type: boolean
- *         description: Filter by products with discounts
- *     responses:
- *       200:
- *         description: A list of products
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Product'
- *                 meta:
- *                   type: object
- *                   properties:
- *                     totalProducts:
- *                       type: integer
- *                     totalPages:
- *                       type: integer
- *                     currentPage:
- *                       type: integer
- *                     pageSize:
- *                       type: integer
- *       500:
- *         description: Failed to fetch products
- */
 const getProducts = async (req, res) => {
     try {
         const {
@@ -257,7 +75,7 @@ const getProducts = async (req, res) => {
             orderBy,
             skip: (pageNumber - 1) * pageSize,
             take: pageSize,
-            include: {                
+            include: {
                 category: true,
                 subcategory: true,
                 Brands: true,
@@ -281,32 +99,6 @@ const getProducts = async (req, res) => {
     }
 };
 
-
-/**
- * @swagger
- * /products/{id}:
- *   get:
- *     summary: Get product by ID
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the product to retrieve
- *     responses:
- *       200:
- *         description: Product details
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Product'
- *       404:
- *         description: Product not found
- *       500:
- *         description: Failed to fetch product
- */
 const getProductById = async (req, res) => {
     try {
         const product = await prisma.product.findUnique({
@@ -325,27 +117,6 @@ const getProductById = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /products/{id}:
- *   delete:
- *     summary: Delete product by ID
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the product to delete
- *     responses:
- *       204:
- *         description: Product deleted successfully
- *       404:
- *         description: Product not found
- *       500:
- *         description: Failed to delete product
- */
 const deleteProductById = async (req, res) => {
     try {
         await prisma.product.delete({
@@ -362,31 +133,6 @@ const deleteProductById = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /products/search:
- *   get:
- *     summary: Search for products
- *     tags: [Products]
- *     parameters:
- *       - in: query
- *         name: q
- *         required: true
- *         schema:
- *           type: string
- *         description: The search query string
- *     responses:
- *       200:
- *         description: A list of matching products
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Product'
- *       500:
- *         description: Failed to search products
- */
 const searchProduct = async (req, res) => {
     try {
         const query = req.query.q;
@@ -417,70 +163,13 @@ const searchProduct = async (req, res) => {
     }
 };
 
-
-/**
- * @swagger
- * /products/{id}:
- *   put:
- *     summary: Update a product by ID
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the product to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               description:
- *                 type: string
- *               price:
- *                 type: number
- *               categoryId:
- *                 type: integer
- *               SubcategoryId:
- *                 type: integer
- *               brandsId:
- *                 type: integer
- *               colorsId:
- *                 type: integer
- *               sizeId:
- *                 type: integer
- *               discount:
- *                 type: number
- *             example:
- *               name: "Updated Product Name"
- *               description: "Updated description"
- *               price: 99.99
- *               categoryId: 1
- *               SubcategoryId: 2
- *               brandsId: 3
- *               colorsId: 4
- *               sizeId: 5
- *               discount: 10
- *     responses:
- *       200:
- *         description: The updated product data
- *       404:
- *         description: Product not found
- *       500:
- *         description: Failed to update product
- */
 const editProduct = async (req, res) => {
     try {
         const { id } = req.params;
         console.log(req.body)
         const updatedProduct = await prisma.product.update({
             where: {
-                id: parseInt(id) 
+                id: parseInt(id)
             },
             data: {
                 name: req.body.name,
@@ -513,56 +202,6 @@ const editProduct = async (req, res) => {
 
 };
 
-/**
- * @swagger
- * /products/category/{categoryId}:
- *   get:
- *     summary: Get products by category
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: categoryId
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the category
- *     responses:
- *       200:
- *         description: A list of products in the specified category
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   description:
- *                     type: string
- *                   price:
- *                     type: number
- *                   category:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       name:
- *                         type: string
- *                   subcategory:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       name:
- *                         type: string
- *       400:
- *         description: Invalid category ID
- *       500:
- *         description: Failed to fetch products by category
- */
 const getProductsByCategory = async (req, res) => {
     try {
         const categoryId = Number(req.params.categoryId);
@@ -592,27 +231,6 @@ const getProductsByCategory = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /products/subcategory/{subcategoryId}:
- *   get:
- *     summary: Get products by subcategory ID
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: subcategoryId
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the subcategory
- *     responses:
- *       200:
- *         description: List of products in the specified subcategory
- *       404:
- *         description: Subcategory not found
- *       500:
- *         description: Failed to retrieve products
- */
 const getProductsBySubcategory = async (req, res) => {
     try {
         const { subcategoryId } = req.params;

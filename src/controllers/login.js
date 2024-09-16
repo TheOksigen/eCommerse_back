@@ -6,49 +6,7 @@ const prisma = require('../utils/prismaClient');
 const sendWelcomeEmail = require('../email/email');
 dotenv.config();
 
-/**
- * @swagger
- * tags:
- *   - name: User
- *     description: Operations related to user management
- */
 
-/**
- * @swagger
- * /login:
- *   post:
- *     tags:
- *       - User
- *     summary: Login a user
- *     description: Authenticates a user and returns a JWT token.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: JWT token
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *       400:
- *         description: Bad request
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Internal server error
- */
 const login = async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -78,37 +36,6 @@ const login = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /add-to-cart:
- *   post:
- *     tags:
- *       - User
- *     summary: Add product to cart
- *     description: Adds a product to the authenticated user's cart. Requires a valid JWT token.
- *     security:
- *       - BearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               productId:
- *                 type: integer
- *     responses:
- *       200:
- *         description: Product added to cart
- *       400:
- *         description: Bad request
- *       401:
- *         description: Unauthorized - Invalid or missing token
- *       404:
- *         description: Product not found
- *       500:
- *         description: Internal server error
- */
 const addToCart = async (req, res) => {
     try {
         const { productId, count = 1 } = req.body;
@@ -167,36 +94,6 @@ const addToCart = async (req, res) => {
     }
 };
 
-
-/**
- * @swagger
- * /delete-cart:
- *   post:
- *     tags:
- *       - User
- *     summary: Remove item from cart
- *     description: Removes an item from the authenticated user's cart. Requires a valid JWT token.
- *     security:
- *       - BearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               itemId:
- *                 type: integer
- *     responses:
- *       200:
- *         description: Item removed from cart
- *       400:
- *         description: Bad request
- *       401:
- *         description: Unauthorized - Invalid or missing token
- *       500:
- *         description: Internal server error
- */
 const deleteCart = async (req, res) => {
     try {
         const { itemId } = req.params;
@@ -241,56 +138,6 @@ const deleteCart = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /register:
- *   post:
- *     tags:
- *       - User
- *     summary: Register a new user
- *     description: Creates a new user account.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               username:
- *                 type: string
- *               phone:
- *                 type: string
- *               address:
- *                 type: string
- *               dob:
- *                 type: string
- *                 format: date
- *               gender:
- *                 type: string
- *                 enum: [MALE, FEMALE, OTHER, GAY, TRANS]
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       201:
- *         description: User registered successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       400:
- *         description: Bad request
- *       500:
- *         description: Internal server error
- */
 const register = async (req, res) => {
     try {
         const { name, user_img, username, phone, address, dob, gender, email, password } = req.body;
@@ -357,7 +204,7 @@ const getAllCart = async (req, res) => {
                 userId: user.id,
             },
             include: {
-                Product: true
+                product_id: true,
 
             },
         });
