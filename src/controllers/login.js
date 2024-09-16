@@ -119,7 +119,7 @@ const deleteCart = async (req, res) => {
         const cartItem = await prisma.cart.findFirst({
             where: {
                 userId: user.id,
-                productId: itemId,
+                productId: +itemId,
             },
         });
 
