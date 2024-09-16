@@ -1,6 +1,6 @@
 
 const express = require('express');
-const auth = require('../middlewares/auth.middleware');
+const {auth, adminAuth} = require('../middlewares/auth.middleware');
 const { createBrand, deleteBrandById, getBrandById, getBrands, updateBrandById } = require('../controllers/brand');
 const router = express.Router();
 

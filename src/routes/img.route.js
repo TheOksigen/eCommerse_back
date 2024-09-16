@@ -1,5 +1,5 @@
 const express = require('express');
-const auth = require('../middlewares/auth.middleware');
+const {auth} = require('../middlewares/auth.middleware');
 const { deleteImage, upload } = require('../middlewares/upload.middleware');
 
 const router = express.Router();
