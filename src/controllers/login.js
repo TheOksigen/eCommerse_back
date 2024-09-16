@@ -241,7 +241,6 @@ const deleteCart = async (req, res) => {
     }
 };
 
-
 /**
  * @swagger
  * /register:
@@ -335,11 +334,45 @@ const register = async (req, res) => {
     }
 };
 
+const getAllCart = async (req, res) => {
+    try {
 
+        const authHeader = req.headers['authorization'];
+        if (!authHeader) {
+            return res.status(401).json({ error: 'Unauthorized: No token provided' });
+        }
+
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await prisma.user.findUnique({ where: { id: decoded.userid } });
+
+        if (!user) {
+            return res.status(401).json({ error: 'Unauthorized: Invalid user' });
+        }
+
+
+        const cart = await prisma.cart.findMany({
+            where: {
+                userId: user.id,
+            },
+            include: {
+                product: true,
+            },
+        });
+        res.status(200).json(cart);
+
+    } catch (error) {
+        console.error("Error getting all cart:", error);
+        res.status(500).json({ error: 'Failed to get all cart' });
+
+    }
+}
 
 module.exports = {
     login,
     addToCart,
     deleteCart,
-    register
+    register,
+    getAllCart
 };
