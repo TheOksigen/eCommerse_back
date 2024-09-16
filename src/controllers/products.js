@@ -150,9 +150,6 @@ const searchProduct = async (req, res) => {
                 category: true,
                 subcategory: true,
                 Brands: true,
-                Colors: true,
-                Size: true,
-                User: true
             }
         });
 
