@@ -257,7 +257,7 @@ const getProducts = async (req, res) => {
             orderBy,
             skip: (pageNumber - 1) * pageSize,
             take: pageSize,
-            include: {
+            include: {                
                 category: true,
                 subcategory: true,
                 Brands: true,

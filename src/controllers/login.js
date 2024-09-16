@@ -357,7 +357,8 @@ const getAllCart = async (req, res) => {
                 userId: user.id,
             },
             include: {
-                product: true,
+                Product: true
+
             },
         });
         res.status(200).json(cart);
