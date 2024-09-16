@@ -1,15 +1,15 @@
 const express = require('express');
-const auth = require('../middlewares/auth.middleware');
+const {auth, adminAuth} = require('../middlewares/auth.middleware');
 const { createProduct, deleteProductById, editProduct, getProductById, getProducts, getProductsByCategory, getProductsBySubcategory, searchProduct } = require('../controllers/products');
 const router = express.Router();
 
 // Route handlers
-router.post('/create', auth, createProduct);
+router.post('/create', auth, adminAuth ,  createProduct);
 router.get('/all', getProducts);
 router.get('/get/:id', getProductById);
 router.patch('/update/:id', auth, editProduct);
 router.get('/search', searchProduct);
-router.delete('/delete/:id', auth, deleteProductById);
+router.delete('/delete/:id', auth, adminAuth , deleteProductById);
 
 // Routes for category and subcategory
 router.get('/category/:category', getProductsByCategory);

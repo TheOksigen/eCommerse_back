@@ -5,10 +5,10 @@ const { createBrand, deleteBrandById, getBrandById, getBrands, updateBrandById }
 const router = express.Router();
 
 // Routes for Brand CRUD operations
-router.post('/create', auth, createBrand);
+router.post('/create', auth, adminAuth, createBrand);
 router.get('/all', getBrands);
 router.get('/get/:id', getBrandById);
-router.put('/update/:id', auth, updateBrandById);
-router.delete('/delete/:id', auth, deleteBrandById);
+router.put('/update/:id', auth, adminAuth, updateBrandById);
+router.delete('/delete/:id', auth, adminAuth, deleteBrandById);
 
 module.exports = router;

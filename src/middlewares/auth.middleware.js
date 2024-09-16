@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 const dotenv = require('dotenv');
-
 dotenv.config();
-
 const prisma = new PrismaClient();
+
 
 const auth = async (req, res, next) => {
     try {
@@ -41,4 +40,11 @@ const auth = async (req, res, next) => {
     }
 };
 
-module.exports = auth;
+const adminAuth = (req, res, next) => {
+    if (req.user.role !== 'ADMIN') {
+        return res.status(403).json({ error: 'Access denied. Admins only.' });
+    }
+    next();
+};
+
+module.exports = { auth, adminAuth };
