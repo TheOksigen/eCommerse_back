@@ -3,7 +3,7 @@ const express = require('express');
 const { auth, adminAuth } = require('../middlewares/auth.middleware');
 const { createBrand, deleteBrandById, getBrandById, getBrands, updateBrandById } = require('../controllers/brand');
 const validateMiddleware = require('../middlewares/validate.middleware');
-const { brandSchema } = require('../types/schemas');
+const { brandSchema } = require('../schemas/schemas');
 const router = express.Router();
 
 // Routes for Brand CRUD operations

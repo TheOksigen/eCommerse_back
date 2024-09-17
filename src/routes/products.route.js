@@ -2,7 +2,7 @@ const express = require('express');
 const { auth, adminAuth } = require('../middlewares/auth.middleware');
 const { createProduct, deleteProductById, editProduct, getProductById, getProducts, getProductsByCategory, getProductsBySubcategory, searchProduct } = require('../controllers/products');
 const validateMiddleware = require('../middlewares/validate.middleware');
-const { productSchema } = require('../types/schemas');
+const { productSchema } = require('../schemas/schemas');
 const router = express.Router();
 
 // Route handlers

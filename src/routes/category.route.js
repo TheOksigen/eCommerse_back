@@ -2,7 +2,7 @@ const express = require('express');
 const { auth, adminAuth } = require('../middlewares/auth.middleware');
 const { createCategory, createSubcategory, deleteCategoryById, deleteSubcategory, editCategoriesById, getCategories, getCategoriesById, updateSubcategory } = require('../controllers/category');
 const validateMiddleware = require('../middlewares/validate.middleware');
-const { categorySchema, subcategorySchema } = require('../types/schemas');
+const { categorySchema, subcategorySchema } = require('../schemas/schemas');
 const router = express.Router();
 
 router.post('/create', validateMiddleware(categorySchema), auth, adminAuth, createCategory);

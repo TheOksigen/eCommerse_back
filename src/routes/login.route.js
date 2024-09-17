@@ -2,7 +2,7 @@ const express = require('express');
 const { register, login, addToCart, deleteCart, getAllCart } = require('../controllers/login');
 const { auth } = require('../middlewares/auth.middleware');
 const validateMiddleware = require('../middlewares/validate.middleware');
-const { registerSchema, loginSchema } = require('../types/schemas');
+const { registerSchema, loginSchema } = require('../schemas/schemas');
 
 const router = express.Router();
 
