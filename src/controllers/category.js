@@ -1,56 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-/**
- * @swagger
- * tags:
- *   - name: Categories
- *     description: Operations related to categories
- *   - name: Subcategories
- *     description: Operations related to subcategories
- */
-/**
- * @swagger
- * /categories/create:
- *   post:
- *     summary: Create a new category
- *     description: Create a new category in the system.
- *     tags:
- *       - Categories
- *     security:
- *       - BearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: Name of the category.
- *               slug:
- *                 type: string
- *                 description: Slug for the category.
- *     responses:
- *       201:
- *         description: Category created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- *                 slug:
- *                   type: string
- *       400:
- *         description: Bad request
- *       500:
- *         description: Internal server error
- */
 const createCategory = async (req, res) => {
     try {
         const { name, slug } = req.body;
@@ -71,33 +21,6 @@ const createCategory = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /categories:
- *   get:
- *     summary: Get all categories
- *     description: Fetches a list of all categories.
- *     tags:
- *       - Categories
- *     responses:
- *       200:
- *         description: List of categories
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   slug:
- *                     type: string
- *       500:
- *         description: Internal server error
- */
 const getCategories = async (req, res) => {
     try {
         
@@ -115,40 +38,6 @@ const getCategories = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /categories/{id}:
- *   get:
- *     summary: Get a category by ID
- *     description: Fetches a single category by its ID.
- *     tags:
- *       - Categories
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the category to retrieve
- *     responses:
- *       200:
- *         description: Category found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- *                 slug:
- *                   type: string
- *       404:
- *         description: Category not found
- *       500:
- *         description: Internal server error
- */
 const getCategoriesById = async (req, res) => {
     try {
         const categoryId = parseInt(req.params.id);
@@ -169,57 +58,6 @@ const getCategoriesById = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /categories/{id}:
- *   put:
- *     summary: Update a category by ID
- *     description: Updates an existing category by its ID.
- *     tags:
- *       - Categories
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the category to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: New name of the category.
- *               slug:
- *                 type: string
- *                 description: New slug for the category.
- *     responses:
- *       200:
- *         description: Category updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- *                 slug:
- *                   type: string
- *       400:
- *         description: Bad request
- *       404:
- *         description: Category not found
- *       500:
- *         description: Internal server error
- */
 const editCategoriesById = async (req, res) => {
     try {
         const categoryId = parseInt(req.params.id);
@@ -246,31 +84,6 @@ const editCategoriesById = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /categories/{id}:
- *   delete:
- *     summary: Delete a category by ID
- *     description: Deletes a category by its ID.
- *     tags:
- *       - Categories
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the category to delete
- *     responses:
- *       204:
- *         description: Category deleted successfully
- *       404:
- *         description: Category not found
- *       500:
- *         description: Internal server error
- */
 const deleteCategoryById = async (req, res) => {
     try {
         const categoryId = parseInt(req.params.id);
@@ -290,53 +103,6 @@ const deleteCategoryById = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /subcategories/create:
- *   post:
- *     summary: Create a new subcategory
- *     description: Creates a new subcategory in the system.
- *     tags:
- *       - Subcategories
- *     security:
- *       - BearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: Name of the subcategory.
- *               categoryId:
- *                 type: integer
- *                 description: ID of the parent category.
- *               slug:
- *                 type: string
- *                 description: Slug for the subcategory.
- *     responses:
- *       201:
- *         description: Subcategory created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- *                 categoryId:
- *                   type: integer
- *                 slug:
- *                   type: string
- *       400:
- *         description: Bad request
- *       500:
- *         description: Internal server error
- */
 const createSubcategory = async (req, res) => {
     try {
         const { name, categoryId, slug } = req.body;
@@ -357,35 +123,6 @@ const createSubcategory = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /subcategories:
- *   get:
- *     summary: Get all subcategories
- *     description: Fetches a list of all subcategories.
- *     tags:
- *       - Subcategories
- *     responses:
- *       200:
- *         description: List of subcategories
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   categoryId:
- *                     type: integer
- *                   slug:
- *                     type: string
- *       500:
- *         description: Internal server error
- */
 const getSubcategories = async (req, res) => {
     try {
         const subcategories = await prisma.subcategory.findMany();
@@ -396,42 +133,6 @@ const getSubcategories = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /subcategories/{id}:
- *   get:
- *     summary: Get a subcategory by ID
- *     description: Fetches a single subcategory by its ID.
- *     tags:
- *       - Subcategories
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the subcategory to retrieve
- *     responses:
- *       200:
- *         description: Subcategory found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- *                 categoryId:
- *                   type: integer
- *                 slug:
- *                   type: string
- *       404:
- *         description: Subcategory not found
- *       500:
- *         description: Internal server error
- */
 const getSubcategoriesById = async (req, res) => {
     try {
         const subcategoryId = parseInt(req.params.id);
@@ -451,62 +152,6 @@ const getSubcategoriesById = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /subcategories/{id}:
- *   put:
- *     summary: Update a subcategory by ID
- *     description: Updates an existing subcategory by its ID.
- *     tags:
- *       - Subcategories
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the subcategory to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: New name of the subcategory.
- *               categoryId:
- *                 type: integer
- *                 description: New ID of the parent category.
- *               slug:
- *                 type: string
- *                 description: New slug for the subcategory.
- *     responses:
- *       200:
- *         description: Subcategory updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- *                 categoryId:
- *                   type: integer
- *                 slug:
- *                   type: string
- *       400:
- *         description: Bad request
- *       404:
- *         description: Subcategory not found
- *       500:
- *         description: Internal server error
- */
 const editSubcategoriesById = async (req, res) => {
     try {
         const subcategoryId = parseInt(req.params.id);
@@ -533,31 +178,6 @@ const editSubcategoriesById = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /subcategories/{id}:
- *   delete:
- *     summary: Delete a subcategory by ID
- *     description: Deletes a subcategory by its ID.
- *     tags:
- *       - Subcategories
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The ID of the subcategory to delete
- *     responses:
- *       204:
- *         description: Subcategory deleted successfully
- *       404:
- *         description: Subcategory not found
- *       500:
- *         description: Internal server error
- */
 const deleteSubcategoryById = async (req, res) => {
     try {
         const subcategoryId = parseInt(req.params.id);
@@ -576,70 +196,7 @@ const deleteSubcategoryById = async (req, res) => {
         }
     }
 };
-/**
- * @swagger
- * /subcategories/update/{id}:
- *   put:
- *     summary: Update a subcategory by ID
- *     description: Updates the details of a specific subcategory identified by its ID.
- *     tags:
- *       - Subcategories
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID of the subcategory to be updated.
- *     requestBody:
- *       description: Subcategory data to update.
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: New name of the subcategory.
- *               categoryId:
- *                 type: integer
- *                 description: ID of the category to which the subcategory belongs.
- *               slug:
- *                 type: string
- *                 description: New slug for the subcategory.
- *             required:
- *               - name
- *               - categoryId
- *     responses:
- *       200:
- *         description: Subcategory updated successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                   description: ID of the updated subcategory.
- *                 name:
- *                   type: string
- *                   description: Updated name of the subcategory.
- *                 categoryId:
- *                   type: integer
- *                   description: ID of the category to which the subcategory belongs.
- *                 slug:
- *                   type: string
- *                   description: Updated slug for the subcategory.
- *       400:
- *         description: Bad request due to missing required fields.
- *       404:
- *         description: Subcategory not found.
- *       500:
- *         description: Internal server error.
- */
+
 const updateSubcategory = async (req, res) => {
     try {
         const subcategoryId = parseInt(req.params.id);
@@ -670,31 +227,6 @@ const updateSubcategory = async (req, res) => {
     }
 };
 
-/**
- * @swagger
- * /subcategories/delete/{id}:
- *   delete:
- *     summary: Delete a subcategory by ID
- *     description: Deletes a specific subcategory identified by its ID.
- *     tags:
- *       - Subcategories
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID of the subcategory to be deleted.
- *     responses:
- *       204:
- *         description: Subcategory deleted successfully.
- *       404:
- *         description: Subcategory not found.
- *       500:
- *         description: Internal server error.
- */
 const deleteSubcategory = async (req, res) => {
     try {
         const subcategoryId = parseInt(req.params.id);
