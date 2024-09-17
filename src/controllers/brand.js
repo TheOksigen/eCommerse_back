@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 const createBrand = async (req, res) => {
     try {
-        const { name, slug } = req.body;
+        const { name, slug } = req.body; 
 
         if (!name) {
             res.status(400).json({ error: 'Brand name is required' });

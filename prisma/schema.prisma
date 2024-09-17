@@ -20,7 +20,6 @@ enum eUser {
 
 enum eGender {
   MALE
-
   FEMALE
   OTHER
   GAY
@@ -38,14 +37,14 @@ model Cart {
 
 model User {
   id       Int       @id @default(autoincrement())
+  username String
+  email    String
   user_img String?   @default("https://i.pinimg.com/originals/1f/28/c6/1f28c68d2c35f389966b5a363b992d06.png")
   name     String
-  username String
   phone    String
   address  String?
   dob      DateTime?
   gender   eGender
-  email    String
   password String
   cart     Cart[]
   role     eUser     @default(USER)
