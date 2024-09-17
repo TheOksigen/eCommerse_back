@@ -44,15 +44,7 @@ const addToCart = async (req, res) => {
             return res.status(400).json({ error: 'Product ID is required' });
         }
 
-        const authHeader = req.headers['authorization'];
-        if (!authHeader) {
-            return res.status(401).json({ error: 'Unauthorized: No token provided' });
-        }
-
-        const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        const user = await prisma.user.findUnique({ where: { id: decoded.userid } });
+        const user = req.user
 
         if (!user) {
             return res.status(401).json({ error: 'Unauthorized: Invalid user' });
@@ -76,8 +68,7 @@ const addToCart = async (req, res) => {
                 where: { id: cartItem.id },
                 data: { count: cartItem.count + count },
             });
-        } else {
-            // Add new product to cart
+        } else {            
             await prisma.cart.create({
                 data: {
                     userId: user.id,
@@ -93,6 +84,43 @@ const addToCart = async (req, res) => {
         res.status(500).json({ error: 'Failed to add product to cart' });
     }
 };
+
+const changeCart = async (req, res) => {
+    try {
+        const { productId, count } = req.body;
+
+        if (!productId || !count) {
+            return res.status(400).json({ error: 'Item ID and count are required' });
+        }
+      
+        const user = req.user
+
+        if (!user) {
+            return res.status(401).json({ error: 'Unauthorized: Invalid user' });
+        }
+
+        const cartItem = await prisma.cart.findFirst({
+            where: {
+                userId: user.id,
+                productId: Number(productId),
+            },
+        });
+
+        if (!cartItem) {
+            return res.status(404).json({ error: 'Item not found in cart' });
+        }
+
+        await prisma.cart.update({
+            where: { id: cartItem.id },
+            data: { count: count },
+        });
+
+        res.status(200).json({ message: 'Cart updated successfully' });
+    } catch (error) {
+        console.error("Error updating cart:", error);
+        res.status(500).json({ error: 'Failed to update cart' });
+    }
+}
 
 const deleteCart = async (req, res) => {
     try {
@@ -222,5 +250,6 @@ module.exports = {
     addToCart,
     deleteCart,
     register,
-    getAllCart
+    getAllCart,
+    changeCart
 };
