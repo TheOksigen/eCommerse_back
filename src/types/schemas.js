@@ -42,7 +42,7 @@ const registerSchema = z.object({
 });
 
 const loginSchema = z.object({
-    email: z.string().email({ message: "Invalid Email" }),
+    username: z.string().nonempty({ message: "Invalid Username" }),
     password: z.string().nonempty({ message: "Invalid Password" })
 });
 
