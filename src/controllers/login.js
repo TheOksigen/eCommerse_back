@@ -38,31 +38,26 @@ const login = async (req, res) => {
 
 const addToCart = async (req, res) => {
     try {
-        const { productId, count = 1, color = null, size = null } = req.body;
+        const { productId, count = 1, color, size } = req.body;
 
-        // Validate productId
         if (!productId) {
             return res.status(400).json({ error: 'Product ID is required' });
         }
 
         const user = req.user;
 
-        // Validate user
         if (!user) {
             return res.status(401).json({ error: 'Unauthorized: Invalid user' });
         }
 
-        // Fetch the product
         const product = await prisma.product.findUnique({
             where: { id: productId }
         });
 
-        // Validate product existence
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        // Check if product is already in cart
         const cartItem = await prisma.cart.findFirst({
             where: {
                 userId: user.id,
@@ -70,14 +65,13 @@ const addToCart = async (req, res) => {
             },
         });
 
-        // If cartItem exists, update it
         if (cartItem) {
             await prisma.cart.update({
                 where: { id: cartItem.id },
                 data: {
                     count: cartItem.count + count, // Update count
-                    color: color || cartItem.color, // Update color if provided
-                    size: size || cartItem.size, // Update size if provided
+                    color: color || cartItem.Color, // Update color if provided
+                    size: size || cartItem.Size, // Update size if provided
                 },
             });
         } else {
@@ -87,8 +81,10 @@ const addToCart = async (req, res) => {
                     userId: user.id,
                     productId: product.id,
                     count,
-                    color,
-                    size,
+                    Color: color,
+                    Size: size,
+                    
+                    
                 },
             });
         }
@@ -108,7 +104,7 @@ const changeCart = async (req, res) => {
         if (!productId || !count) {
             return res.status(400).json({ error: 'Item ID and count are required' });
         }
-      
+
         const user = req.user
 
         if (!user) {
