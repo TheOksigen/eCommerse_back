@@ -21,7 +21,7 @@ const productSchema = z.object({
     description: z.string().optional().refine(val => val !== undefined, { message: "Invalid Product Description" }),
     price: z.number().positive({ message: "Invalid Product Price" }),
     discount: z.number().int().positive({ message: "Invalid Product Discount" }),
-    images: z.array(z.string()).nonempty({ message: "Invalid Product Images" }),
+    images: z.array(z.string()).min(1, { message: "Invalid Product Images" }),  // Changed nonempty to min(1)
     categoryId: z.number().int().positive({ message: "Invalid Category ID for Product" }),
     subcategoryId: z.number().int().optional().refine(val => val !== undefined, { message: "Invalid Subcategory ID for Product" }),
     brandsId: z.number().int().positive({ message: "Invalid Brand ID for Product" }),
@@ -30,20 +30,20 @@ const productSchema = z.object({
 });
 
 const registerSchema = z.object({
-    username: z.string().nonempty({ message: "Invalid Username" }),
+    username: z.string().min(1, { message: "Invalid Username" }),  // Changed nonempty to min(1)
     email: z.string().email({ message: "Invalid Email" }),
     user_img: z.array(z.string()).optional(),  
-    name: z.string().nonempty({ message: "Invalid Name" }),
-    phone: z.string().nonempty({ message: "Invalid Phone Number" }),
+    name: z.string().min(1, { message: "Invalid Name" }),  // Changed nonempty to min(1)
+    phone: z.string().min(1, { message: "Invalid Phone Number" }),  // Changed nonempty to min(1)
     address: z.string().optional(),
     dob: z.string().optional(),
     gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'GAY', 'TRANS'], { message: "Invalid Gender" }),
-    password: z.string().nonempty({ message: "Invalid Password" })
+    password: z.string().min(1, { message: "Invalid Password" })  // Changed nonempty to min(1)
 });
 
 const loginSchema = z.object({
-    username: z.string().nonempty({ message: "Invalid Username" }),
-    password: z.string().nonempty({ message: "Invalid Password" })
+    username: z.string().min(1, { message: "Invalid Username" }),  // Changed nonempty to min(1)
+    password: z.string().min(1, { message: "Invalid Password" })  // Changed nonempty to min(1)
 });
 
 module.exports = {
