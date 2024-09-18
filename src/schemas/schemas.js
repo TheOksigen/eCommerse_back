@@ -1,49 +1,59 @@
 const { z } = require("zod");
 
+const eColors = ['RED', 'GREEN', 'BLUE', 'YELLOW', 'BLACK', 'WHITE', 'ORANGE', 'PURPLE', 'INDIGO', 'VIOLET'];
+const eSize = ['S', 'M', 'L', 'XL', 'XXL'];
+
 const brandSchema = z.object({
-    name: z.string().optional().refine(val => val !== undefined, { message: "Invalid Brand Name" }),
-    slug: z.string().optional().refine(val => val !== undefined, { message: "Invalid Brand Slug" })
+    name: z.string().min(1, { message: "Invalid Brand Name" }).optional(),
+    slug: z.string().min(1, { message: "Invalid Brand Slug" }).optional()
+});
+
+const addToCartSchema = z.object({
+    productId: z.number({ message: "Product ID is required" }).positive({ message: "Product ID must be a positive number" }),
+    count: z.number().int().positive({ message: "Count must be a positive integer" }).default(1),
+    color: z.enum(eColors).optional(),
+    size: z.enum(eSize).optional(),
 });
 
 const categorySchema = z.object({
-    name: z.string().optional().refine(val => val !== undefined, { message: "Invalid Category Name" }),
-    slug: z.string().optional().refine(val => val !== undefined, { message: "Invalid Category Slug" })
+    name: z.string().min(1, { message: "Invalid Category Name" }).optional(),
+    slug: z.string().min(1, { message: "Invalid Category Slug" }).optional()
 });
 
 const subcategorySchema = z.object({
-    name: z.string().optional().refine(val => val !== undefined, { message: "Invalid Subcategory Name" }),
-    slug: z.string().optional().refine(val => val !== undefined, { message: "Invalid Subcategory Slug" }),
+    name: z.string().min(1, { message: "Invalid Subcategory Name" }).optional(),
+    slug: z.string().min(1, { message: "Invalid Subcategory Slug" }).optional(),
     categoryId: z.number().int().positive({ message: "Invalid Category ID for Subcategory" })
 });
 
 const productSchema = z.object({
-    name: z.string().optional().refine(val => val !== undefined, { message: "Invalid Product Name" }),
-    description: z.string().optional().refine(val => val !== undefined, { message: "Invalid Product Description" }),
+    name: z.string().min(1, { message: "Invalid Product Name" }).optional(),
+    description: z.string().min(1, { message: "Invalid Product Description" }).optional(),
     price: z.number().positive({ message: "Invalid Product Price" }),
     discount: z.number().int().positive({ message: "Invalid Product Discount" }),
-    images: z.array(z.string()).min(1, { message: "Invalid Product Images" }),  // Changed nonempty to min(1)
+    images: z.array(z.string()).min(1, { message: "Invalid Product Images" }),
     categoryId: z.number().int().positive({ message: "Invalid Category ID for Product" }),
-    subcategoryId: z.number().int().optional().refine(val => val !== undefined, { message: "Invalid Subcategory ID for Product" }),
+    subcategoryId: z.number().int().optional(),
     brandsId: z.number().int().positive({ message: "Invalid Brand ID for Product" }),
-    Colors: z.enum(['RED', 'GREEN', 'BLUE', 'BLACK', 'WHITE'], { message: "Invalid Product Color" }),
-    Size: z.enum(['S', 'M', 'L', 'XL', 'XXL'], { message: "Invalid Product Size" })
+    Colors: z.enum(eColors, { message: "Invalid Product Color" }),
+    Size: z.enum(eSize, { message: "Invalid Product Size" })
 });
 
 const registerSchema = z.object({
-    username: z.string().min(1, { message: "Invalid Username" }),  // Changed nonempty to min(1)
+    username: z.string().min(1, { message: "Invalid Username" }),
     email: z.string().email({ message: "Invalid Email" }),
-    user_img: z.array(z.string()).optional(),  
-    name: z.string().min(1, { message: "Invalid Name" }),  // Changed nonempty to min(1)
-    phone: z.string().min(1, { message: "Invalid Phone Number" }),  // Changed nonempty to min(1)
+    user_img: z.array(z.string()).optional(),
+    name: z.string().min(1, { message: "Invalid Name" }),
+    phone: z.string().min(1, { message: "Invalid Phone Number" }),
     address: z.string().optional(),
     dob: z.string().optional(),
     gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'GAY', 'TRANS'], { message: "Invalid Gender" }),
-    password: z.string().min(1, { message: "Invalid Password" })  // Changed nonempty to min(1)
+    password: z.string().min(1, { message: "Invalid Password" })
 });
 
 const loginSchema = z.object({
-    username: z.string().min(1, { message: "Invalid Username" }),  // Changed nonempty to min(1)
-    password: z.string().min(1, { message: "Invalid Password" })  // Changed nonempty to min(1)
+    username: z.string().min(1, { message: "Invalid Username" }),
+    password: z.string().min(1, { message: "Invalid Password" })
 });
 
 module.exports = {
@@ -52,5 +62,9 @@ module.exports = {
     subcategorySchema,
     loginSchema,
     productSchema,
-    registerSchema
+    registerSchema,
+    addToCartSchema,
+
+    eColors,
+    eSize
 };

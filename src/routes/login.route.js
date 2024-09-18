@@ -2,7 +2,7 @@ const express = require('express');
 const { register, login, addToCart, deleteCart, getAllCart } = require('../controllers/login');
 const { auth } = require('../middlewares/auth.middleware');
 const validateMiddleware = require('../middlewares/validate.middleware');
-const { registerSchema, loginSchema } = require('../schemas/schemas');
+const { registerSchema, loginSchema, addToCartSchema } = require('../schemas/schemas');
 
 const router = express.Router();
 
@@ -11,6 +11,6 @@ router.post('/login', validateMiddleware(loginSchema), login);
 router.post('/cart/add', auth, addToCart);
 router.delete('/cart/delete/:itemId', auth, deleteCart);
 router.get('/cart/all', auth, getAllCart)
-router.put('/cart/change', auth, addToCart);
+router.put('/cart/change', validateMiddleware(addToCartSchema), auth, addToCart);
 
 module.exports = router;
