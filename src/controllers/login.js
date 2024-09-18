@@ -83,8 +83,8 @@ const addToCart = async (req, res) => {
                     count,
                     Color: color,
                     Size: size,
-                    
-                    
+
+
                 },
             });
         }
@@ -257,11 +257,46 @@ const getAllCart = async (req, res) => {
     }
 }
 
+const userUpdate = async (req, res) => {
+    try {
+        const { name, user_img, phone, address, dob } = req.body;
+
+        const userId = req.user.id;
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                name: name || user.name,
+                user_img: user_img || user.user_img,
+                phone: phone || user.phone,
+                address: address || user.address,
+                dob: dob || user.dob
+            }
+        });
+
+        res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+
+
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ error: 'Failed to update user' });
+    }
+}
+
 module.exports = {
     login,
     addToCart,
     deleteCart,
     register,
     getAllCart,
-    changeCart
+    changeCart,
+    userUpdate
 };
