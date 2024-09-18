@@ -32,12 +32,12 @@ const productSchema = z.object({
 const registerSchema = z.object({
     username: z.string().nonempty({ message: "Invalid Username" }),
     email: z.string().email({ message: "Invalid Email" }),
-    user_img: z.array(z.string()).optional(),  // Removed refine for optional handling
+    user_img: z.array(z.string()).optional(),  
     name: z.string().nonempty({ message: "Invalid Name" }),
     phone: z.string().nonempty({ message: "Invalid Phone Number" }),
     address: z.string().optional(),
     dob: z.string().optional(),
-    gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'GAY', 'TRANS'], { message: "Invalid Gender" }),  // Gender enum remains uppercase
+    gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'GAY', 'TRANS'], { message: "Invalid Gender" }),
     password: z.string().nonempty({ message: "Invalid Password" })
 });
 
