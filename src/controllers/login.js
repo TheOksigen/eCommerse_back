@@ -31,7 +31,7 @@ const login = async (req, res) => {
 
         res.status(200).json({ token, user });
     } catch (error) {
-        console.error("Login error:", error);
+
         res.status(500).json({ error: 'Failed to login' });
     }
 };
@@ -50,6 +50,14 @@ const addToCart = async (req, res) => {
             return res.status(401).json({ error: 'Unauthorized: Invalid user' });
         }
 
+        // if (!Object.values(prisma.eColors).includes(color)) {
+        //     return res.status(400).json({ error: 'Invalid color' });
+        // }
+
+        // if (!Object.values(prisma.eSize).includes(size)) {
+        //     return res.status(400).json({ error: 'Invalid size' });
+        // }
+
         const product = await prisma.product.findUnique({
             where: { id: productId }
         });
@@ -67,22 +75,27 @@ const addToCart = async (req, res) => {
             },
         });
 
+
+        console.log(req.body)
+
         if (cartItem) {
             await prisma.cart.update({
                 where: { id: cartItem.id },
                 data: {
-                    count: cartItem.count + count, // Update count
-                    color: color || cartItem.Color, // Update color if provided
-                    size: size || cartItem.Size, // Update size if provided
+                    count: cartItem.count + count,
+                    Color: color || cartItem.Color,
+                    Size: size || cartItem.Size,
                 },
             });
         } else {
-            // If not, create a new cart item
+
+            console.log(color, size)
+
             await prisma.cart.create({
                 data: {
                     userId: user.id,
                     productId: product.id,
-                    count,
+                    count: count,
                     Color: color,
                     Size: size,
                 },
@@ -109,7 +122,6 @@ const changeCart = async (req, res) => {
         if (!user) {
             return res.status(401).json({ error: 'Unauthorized: Invalid user' });
         }
-
         const cartItem = await prisma.cart.findFirst({
             where: {
                 userId: user.id,
@@ -156,10 +168,7 @@ const deleteCart = async (req, res) => {
         }
 
         const cartItem = await prisma.cart.findFirst({
-            where: {
-                userId: user.id,
-                productId: Number(itemId),
-            },
+            where: { id: Number(itemId), }
         });
 
         if (!cartItem) {
@@ -258,7 +267,7 @@ const getAllCart = async (req, res) => {
 
 const userUpdate = async (req, res) => {
     try {
-        const { name, user_img, phone, address, dob } = req.body;
+        const { name, user_img, phone, address, dob, password } = req.body;
 
         const userId = req.user.id;
 
@@ -270,6 +279,8 @@ const userUpdate = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const updatedUser = await prisma.user.update({
             where: { id: userId },
             data: {
@@ -277,9 +288,11 @@ const userUpdate = async (req, res) => {
                 user_img: user_img || user.user_img,
                 phone: phone || user.phone,
                 address: address || user.address,
-                dob: dob || user.dob
+                dob: dob || user.dob,
+                password: hashedPassword || user.password
             }
         });
+
 
         res.status(200).json({ message: 'User updated successfully', user: updatedUser });
 
