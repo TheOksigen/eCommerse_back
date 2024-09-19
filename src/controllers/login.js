@@ -88,7 +88,7 @@ const addToCart = async (req, res) => {
                 },
             });
         }
-    
+
         res.status(200).json({ message: 'Product added to cart', product });
     } catch (error) {
         console.error("Add to cart error:", error);
@@ -121,12 +121,12 @@ const changeCart = async (req, res) => {
             return res.status(404).json({ error: 'Item not found in cart' });
         }
 
-        await prisma.cart.update({
+        const updatedCart = await prisma.cart.update({
             where: { id: cartItem.id },
             data: { count: count },
         });
 
-        res.status(200).json({ message: 'Cart updated successfully' });
+        res.status(200).json({ message: 'Cart updated successfully', updatedCart });
     } catch (error) {
         console.error("Error updating cart:", error);
         res.status(500).json({ error: 'Failed to update cart' });

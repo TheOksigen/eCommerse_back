@@ -32,8 +32,8 @@ model Cart {
   userId     Int
   product_id Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId  Int
-  Color      eColors @default(RED)
-  Size       eSize   @default(S)
+  Color      eColors 
+  Size       eSize   
   
   count      Int     @default(1)
 }
