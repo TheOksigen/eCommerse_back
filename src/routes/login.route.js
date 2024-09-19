@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, addToCart, deleteCart, getAllCart, userUpdate } = require('../controllers/login');
+const { register, login, addToCart, deleteCart, getAllCart, userUpdate, changeCart } = require('../controllers/login');
 const { auth } = require('../middlewares/auth.middleware');
 const validateMiddleware = require('../middlewares/validate.middleware');
 const { registerSchema, loginSchema, addToCartSchema } = require('../schemas/schemas');
