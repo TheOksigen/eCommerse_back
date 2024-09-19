@@ -11,7 +11,7 @@ router.post('/login', validateMiddleware(loginSchema), login);
 router.post('/cart/add', auth, addToCart);
 router.delete('/cart/delete/:itemId', auth, deleteCart);
 router.get('/cart/all', auth, getAllCart)
-router.put('/cart/change', validateMiddleware(addToCartSchema), auth, addToCart);
+router.put('/cart/change', auth, changeCart);
 router.put('/user/update', auth, userUpdate);
 
 module.exports = router;
