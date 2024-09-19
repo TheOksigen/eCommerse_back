@@ -62,6 +62,8 @@ const addToCart = async (req, res) => {
             where: {
                 userId: user.id,
                 productId: product.id,
+                Color: color,
+                Size: size,
             },
         });
 
@@ -83,13 +85,10 @@ const addToCart = async (req, res) => {
                     count,
                     Color: color,
                     Size: size,
-
-
                 },
             });
         }
-
-        // Respond with success
+    
         res.status(200).json({ message: 'Product added to cart', product });
     } catch (error) {
         console.error("Add to cart error:", error);
