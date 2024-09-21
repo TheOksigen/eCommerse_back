@@ -34,25 +34,16 @@ const subcategorySchema = z.object({
 const productSchema = z.object({
     name: z.string().min(1, { message: "Invalid Product Name" }).optional(),
     description: z.string().min(1, { message: "Invalid Product Description" }).optional(),
-    
-    // Convert price from string to number
     price: z.preprocess((value) => parseFloat(value), z.number().positive({ message: "Invalid Product Price" })),
-    
-    // Convert discount from string to number
     discount: z.preprocess((value) => parseInt(value, 10), z.number().int().positive({ message: "Invalid Product Discount" })),
-    
     images: z.array(z.string()).min(1, { message: "Invalid Product Images" }),
-    
-    // Convert categoryId and subcategoryId from string to number
     categoryId: z.preprocess((value) => parseInt(value, 10), z.number().int().positive({ message: "Invalid Category ID for Product" })),
     subcategoryId: z.preprocess((value) => value ? parseInt(value, 10) : undefined, z.number().int().optional()),
-    
-    // Convert brandsId from string to number
     brandsId: z.preprocess((value) => parseInt(value, 10), z.number().int().positive({ message: "Invalid Brand ID for Product" })),
-    
-    Colors: z.enum(eColors, { message: "Invalid Product Color" }),
-    Size: z.enum(eSize, { message: "Invalid Product Size" })
+    Colors: z.enum(eColors, { message: "Invalid Product Color" }).optional(),
+    Size: z.enum(eSize, { message: "Invalid Product Size" }).optional()
 });
+
 
 // User registration schema validation
 const registerSchema = z.object({

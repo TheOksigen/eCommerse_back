@@ -3,9 +3,8 @@ const { z } = require("zod");
 const validateMiddleware = (schema) => {
     return (req, res, next) => {
         try {
-            next();
-            
-            // schema.parse(req.body);
+            schema.parse(req.body);
+            next();            
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
