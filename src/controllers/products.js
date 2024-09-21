@@ -1,7 +1,11 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+
+
+
 const createProduct = async (req, res) => {
     try {
+        console.log(req.body)
         const newProduct = await prisma.product.create({
             data: {
                 name: req.body.name,
