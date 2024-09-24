@@ -35,7 +35,7 @@ const productSchema = z.object({
     name: z.string().min(1, { message: "Invalid Product Name" }).optional(),
     description: z.string().min(1, { message: "Invalid Product Description" }).optional(),
     price: z.preprocess((value) => parseFloat(value), z.number().positive({ message: "Invalid Product Price" })),
-    discount: z.preprocess((value) => parseInt(value, 10), z.number().int().positive({ message: "Invalid Product Discount" })),
+    discount: z.preprocess((value) => parseInt(value, 10), z.number().int().nonnegative({ message: "Invalid Product Discount" })),
     images: z.array(z.string()).min(1, { message: "Invalid Product Images" }),
     categoryId: z.preprocess((value) => parseInt(value, 10), z.number().int().positive({ message: "Invalid Category ID for Product" })),
     subcategoryId: z.preprocess((value) => value ? parseInt(value, 10) : undefined, z.number().int().optional()),
